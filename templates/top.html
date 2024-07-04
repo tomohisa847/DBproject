@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .main-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            color: #000;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        a.output {
+            flex-grow: 0;
+            border-radius: 50px;
+        }
+        a:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <p>ようこそ！{{namae}}さん</p>
+        <ul>
+            <li>
+                <a href="/insertHelth">体調観察表を入力</a>
+                <a class="output" href="">出力</a>
+            </li>
+            <li>
+                <a href="/insetActivity">行動記録表を入力</a>
+                <a class="output" href="">出力</a>
+            </li>
+            <li><a href="">ログアウト</a></li>
+        </ul>
+    </div>
+</body>
+</html>

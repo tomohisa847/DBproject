@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行動記録フォーム</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .conduct-form {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .conduct-form h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .conduct-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .conduct-form #time,
+        .conduct-form #place,
+        .conduct-form #way,
+        .conduct-form #companion {
+            margin-left: 15px;
+            margin-bottom: 15px;
+        }
+
+        .conduct-form #time label,
+        .conduct-form #place label,
+        .conduct-form #way label,
+        .conduct-form #companion label {
+            width: 50px;
+            display: inline-block;
+        }
+
+        .conduct-form #way input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .conduct-form #companion input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .conduct-form .separator {
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .conduct-form textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .conduct-form button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .conduct-form button#back {
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="conduct-form">
+        <h1>行動記録フォーム</h1>
+        <label for="time">時間</label>
+        <div id="time">
+            <label for="start">開始</label>
+            <input type="text" id="start">
+            <span class="separator">～</span>
+            <label for="stop">終了</label>
+            <input type="text" id="stop">
+        </div>
+        <label for="place">場所</label>
+        <div id="place">
+            <label for="departure">出発</label>
+            <input type="text" id="departure">
+            <span class="separator">～</span>
+            <label for="destination">到着</label>
+            <input type="text" id="destination">
+        </div>
+        <label for="way">移動方法</label>
+        <div id="way">
+            <input type="checkbox" id="walk"><label for="walk">徒歩</label>
+            <input type="checkbox" id="car"><label for="car">車</label>
+            <input type="checkbox" id="bus"><label for="bus">バス</label>
+            <input type="checkbox" id="train"><label for="train">電車</label>
+            <input type="checkbox" id="other"><label for="other">その他</label>
+        </div>
+        <label for="companion">同行者有無</label>
+        <div id="companion">
+            <input type="checkbox" id="yes"><label for="yes">あり</label>
+            <input type="checkbox" id="no"><label for="no">なし</label>
+        </div>
+        <div>
+            <label for="accompanying">同行者氏名</label>
+            <input type="text" id="accompanying">
+        </div>
+        <div>
+            <label for="note">特記事項</label>
+            <br>
+            <textarea name="note" id="note"></textarea>
+        </div>
+        <button id="submit">送信</button>
+        <button id="back">戻る</button>
+    </div>
+</body>
+
+</html>

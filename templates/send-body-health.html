@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>体調入力画面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .condition-form {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .condition-form h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .condition-form div {
+            margin-bottom: 20px;
+        }
+
+        .condition-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .condition-form .temperature {
+            display: flex;
+            align-items: center;
+        }
+
+        .condition-form .temperature label {
+            margin-right: 10px;
+        }
+
+        .condition-form .temperature input[type="text"] {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .condition-form ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .condition-form ul li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .condition-form ul li label {
+            margin-left: 10px;
+        }
+
+        .condition-form button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .condition-form button:last-child {
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="condition-form">
+        <h1>体調入力画面</h1>
+        <div class="temperature">
+            <label for="temperature">体温</label>
+            <input type="text" id="temperature" value="℃">
+        </div>
+        <div>以下の症状が当てはまる場合チェックを入れてください
+            <ul>
+                <li><input type="checkbox" id="arthralgia"><label for="arthralgia">関節痛・筋肉痛</label></li>
+                <li><input type="checkbox" id="sluggishness"><label for="sluggishness">だるさ</label></li>
+                <li><input type="checkbox" id="headache"><label for="headache">頭痛</label></li>
+                <li><input type="checkbox" id="pharyngalgia"><label for="pharyngalgia">咽頭痛</label></li>
+                <li><input type="checkbox" id="breathlessness"><label for="breathlessness">息苦しさ</label></li>
+                <li><input type="checkbox" id="cough"><label for="cough">咳・くしゃみ</label></li>
+                <li><input type="checkbox" id="nausea"><label for="nausea">吐き気・嘔吐</label></li>
+                <li><input type="checkbox" id="stomachache"><label for="stomachache">腹痛・下痢</label></li>
+                <li><input type="checkbox" id="dysgeusia"><label for="dysgeusia">味覚障害</label></li>
+                <li><input type="checkbox" id="olfactory disorder"><label for="olfactory disorder">嗅覚障害</label></li>
+            </ul>
+        </div>
+        <button>送信</button>
+        <button>戻る</button>
+    </div>
+</body>
+
+</html>
