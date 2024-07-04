@@ -61,14 +61,7 @@ def insertHelth():
 
 @app.route("/insetActivity")
 def insetActivity():
-    dbcon,cur = my_open( **dsn )
-    person_id = 'S260007'
-    sqlstring = f"""
-        SELECT *
-        FROM PersonalInfo
-        WHERE person_id = '{person_id}'
-        ;
-    """
+
     my_query(sqlstring,cur)
     recset = cur.fetchall()
     if recset:
