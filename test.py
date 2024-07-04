@@ -62,13 +62,7 @@ def insertHelth():
 @app.route("/insetActivity")
 def insetActivity():
 
-    my_query(sqlstring,cur)
-    recset = cur.fetchall()#コメントアウトう文
-    if recset:
-        namae = recset[0]['u_name']  # 辞書形式で取得
-    else:
-        namae = "Name not found"
-    my_close(dbcon, cur)
+
     return render_template( "top.html",
         namae=namae
     )
