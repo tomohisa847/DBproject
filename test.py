@@ -63,7 +63,7 @@ def insertHelth():
 def insetActivity():
 
     my_query(sqlstring,cur)
-    recset = cur.fetchall()
+    recset = cur.fetchall()#コメントアウトう文
     if recset:
         namae = recset[0]['u_name']  # 辞書形式で取得
     else:
