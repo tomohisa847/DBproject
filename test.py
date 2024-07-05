@@ -40,7 +40,7 @@ def top():
 @app.route("/insertHelth")
 def insertHelth():
     dbcon,cur = my_open( **dsn )
-    person_id = 'S260007'
+    person_id = 'S260009'
     sqlstring = f"""
         SELECT *
         FROM PersonalInfo
