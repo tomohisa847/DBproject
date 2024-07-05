@@ -61,7 +61,6 @@ def insertHelth():
 
 @app.route("/insetActivity")
 def insetActivity():
-    ####dfsfjsladjf
     return render_template( "top.html",
         namae=namae
     )
