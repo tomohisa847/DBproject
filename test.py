@@ -59,9 +59,11 @@ def insertHelth():
     )
 
 
-@app.route("/insetActivity")
+@app.route("/insetActivity",method=["POST"])
 def insetActivity():
-    return render_template( "top.html",
+
+
+    return render_template( "send-actionlog.html",
         namae=namae
     )
 
