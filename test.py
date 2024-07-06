@@ -80,10 +80,26 @@ def insertActivity2():
     accompanying = request.form["accompanying"]
     #特記事項を取得
     note = request.form["note"]
-
+    if companion:
+        exsit = 'あり'
+    else:
+        exsit = 'なし'
     return render_template( "send-actionlog-show.html",
         title = "登録完了画面",
-        message = way
+        message = f"""
+                    以下の内容で登録しました。
+                    開始: {start}
+                    終了: {stop}
+                    出発地点: {departure}
+                    中継地点1: {transit_address1}
+                    中継地点2: {transit_address2}
+                    中継地点3: {transit_address3}
+                    目的地: {destination}
+                    移動手段: {way}
+                    同行者有無: {companion}
+                    同行者名: {accompanying}
+                    特記事項: {note}
+                """
     )
 
 
