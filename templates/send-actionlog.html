@@ -91,6 +91,7 @@
     </style>
 </head>
 
+
 <body>
     <form class="conduct-form" method="POST" action="/insertActivity2">
         <h1>行動記録フォーム</h1>
@@ -125,13 +126,17 @@
         </div>
         <label for="companion">同行者有無</label>
         <div id="companion">
-            <input type="radio" name="companion" value="true"><label for="yes">あり</label>
-            <input type="radio" name="companion" value="false"><label for="no">なし</label>
+            <input type="radio" name="companion" value="true" onclick="showHideDiv(true)"><label for="yes">あり</label>
+            <input type="radio" name="companion" value="false" onclick="showHideDiv(false)"><label for="no">なし</label>
         </div>
-        <div>
+
+        <div id="accompanying_field" class="hidden">
             <label for="accompanying">同行者氏名</label>
-            <input type="text" name="accompanying">
+            <input type="text" name="accompanying" id="accompanying">
         </div>
+
+        <input type="hidden" name="accompanying" id="hidden_accompanying" value="none">
+
         <div>
             <label for="note">特記事項</label>
             <br>
@@ -158,7 +163,23 @@
                 alert("中継地点は最大3地点までです。");
             }
         }
+        function showHideDiv(show) {
+            const accompanyingField = document.getElementById("accompanying_field");
+            const hiddenAccompanying = document.getElementById("hidden_accompanying");
+            if (show) {
+                accompanyingField.classList.remove('hidden');
+                hiddenAccompanying.disabled = true;  // 隠しフィールドを無効化
+            } else {
+                accompanyingField.classList.add('hidden');
+                hiddenAccompanying.disabled = false;  // 隠しフィールドを有効化
+                document.getElementById("accompanying").value = '';  // 表示フィールドをクリア
+            }
+        }
+
+        // 初期状態を設定
+        document.addEventListener('DOMContentLoaded', () => {
+            showHideDiv(false);  // 初期状態は「なし」
+        });
     </script>
 </body>
-
 </html>

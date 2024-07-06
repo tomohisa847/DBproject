@@ -96,7 +96,7 @@ def insertActivity2():
                     中継地点3: {transit_address3}
                     目的地: {destination}
                     移動手段: {way}
-                    同行者有無: {companion}
+                    同行者有無: {exsit}
                     同行者名: {accompanying}
                     特記事項: {note}
                 """
