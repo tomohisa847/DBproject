@@ -58,13 +58,32 @@ def insertHelth():
         namae=namae
     )
 
+@app.route("/insertActivity1")
+def insertActivity1():
+    return render_template( "send-actionlog.html")
 
-@app.route("/insetActivity",method=["POST"])
-def insetActivity():
+@app.route("/insertActivity2",methods=['GET','POST'])
+def insertActivity2():
+    #開始時間と終了時間の取得　
+    start = request.form["start"]
+    stop = request.form["stop"]
+    #出発地点と通過地点と到着地の取得
+    departure = request.form["departure"]
+    transit_address1 = request.form.get('transit_address1')
+    transit_address2 = request.form.get('transit_address2')
+    transit_address3 = request.form.get('transit_address3')
+    destination = request.form["destination"]
+    #移動手段を取得
+    way = request.form["way"]
+    #同行者の有無を取得してありなら名前を聞く
+    companion = request.form["companion"]
+    accompanying = request.form["accompanying"]
+    #特記事項を取得
+    note = request.form["note"]
 
-
-    return render_template( "send-actionlog.html",
-        namae=namae
+    return render_template( "send-actionlog-show.html",
+        title = "登録完了画面",
+        message = way
     )
 
 
