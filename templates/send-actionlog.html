@@ -98,10 +98,10 @@
         <label for="time">時間</label>
         <div id="time">
             <label for="start">開始</label>
-            <input type="date" name="start">
+            <input type="datetime-local" name="start">
             <span class="separator">～</span>
             <label for="stop">終了</label>
-            <input type="date" name="stop">
+            <input type="datetime-local" name="stop">
         </div>
         <label for="place">場所</label>
         <div id="place">
@@ -131,8 +131,7 @@
         </div>
 
         <div id="accompanying_field" class="hidden">
-            <label for="accompanying">同行者氏名</label>
-            <input type="text" name="accompanying" id="accompanying">
+
         </div>
 
         <input type="hidden" name="accompanying" id="hidden_accompanying" value="none">
@@ -165,14 +164,17 @@
         }
         function showHideDiv(show) {
             const accompanyingField = document.getElementById("accompanying_field");
-            const hiddenAccompanying = document.getElementById("hidden_accompanying");
+            const newAccompanyingDiv = document.createElement('div');
             if (show) {
-                accompanyingField.classList.remove('hidden');
-                hiddenAccompanying.disabled = true;  // 隠しフィールドを無効化
+                accompanyingField.innerHTML=`
+                    <label for="accompanying">同行者氏名</label>
+                    <input type="text" name="accompanying" id="accompanying">
+                `;
+                accompanyingField.appendChild(newAccompanyingDiv);
             } else {
-                accompanyingField.classList.add('hidden');
-                hiddenAccompanying.disabled = false;  // 隠しフィールドを有効化
-                document.getElementById("accompanying").value = '';  // 表示フィールドをクリア
+                
+                accompanyingField.innerHTML=``;
+                
             }
         }
 
