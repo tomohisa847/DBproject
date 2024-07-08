@@ -1,7 +1,7 @@
 from MyDatabase import my_open , my_query , my_close
 import pandas as pd
-from flask import Flask, request, render_template, session, redirect, url_for
 import sqlite3
+from flask import Flask, request, render_template, session, redirect, url_for, make_response
 #Data Source Nameのパラメータを辞書型変数で定義
 dsn = {
     'host' : '172.30.0.10',  #ホスト名(IPアドレス)
@@ -14,12 +14,36 @@ dsn = {
 #Flaskのコンストラクタ
 app = Flask(__name__ ,static_folder="static")
 app.secret_key = 'your_secret_key'
+
+# キャッシュを無効化するための関数
+def add_no_cache_headers(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '-1'
+    return response
+
+@app.before_request
+def before_request():
+    # ログインが必要なページを定義
+    login_required_paths = ['/']
+    if request.path in login_required_paths:
+        if 'person_id' not in session:
+            return redirect(url_for('login'))
+
+@app.after_request
+def after_request(response):
+    # ログアウト後のキャッシュを無効化
+    if request.endpoint == 'logout':
+        response = add_no_cache_headers(response)
+    return response
+
 #ルーティング定義
 @app.route("/")
 def top():
+    if 'person_id' not in session:
+        return redirect(url_for('login'))
     dbcon,cur = my_open( **dsn )
-    if 'person_id' in session:
-        person_id = session['person_id']
+    person_id = session['person_id']
     sqlstring = f"""
         SELECT *
         FROM PersonalInfo
@@ -74,7 +98,10 @@ def login1():
 @app.route("/logout")
 def logout():
     session.pop('person_id', None)
-    return redirect(url_for('login'))
+    response = redirect(url_for('login'))
+    response = add_no_cache_headers(response)
+    return response
+
 
 @app.route("/insertHelth")
 def insertHelth():
