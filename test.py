@@ -36,6 +36,26 @@ def top():
         namae=namae
     )
 
+@app.route("/login")
+def login():
+    return render_template( "login.html")
+
+@app.route("/login1")
+def login1():
+    dbcon,cur = my_open( **dsn )
+    person_id = request.form["user"]
+    password = request.form["password"]
+    sqlstring =f"""
+        select person_id,pass
+        from PersonalInfo
+        where person_id ='{person_id}' and pass ='{password}'
+        ;
+    """
+    my_query(sqlstring,cur)
+    dbcon.commit()
+    return render_template( "login.html")
+
+
 
 @app.route("/insertHelth")
 def insertHelth():
