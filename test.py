@@ -24,6 +24,21 @@ def add_header(response):
     return response
 
 
+@app.before_request
+def before_request():
+    # ログインが必要なページを定義
+    login_required_paths = ['/', '/top']
+    if request.path in login_required_paths:
+        if 'person_id' not in session:
+            return redirect(url_for('login'))
+
+@app.after_request
+def after_request(response):
+    # ログアウト後のキャッシュを無効化
+    if request.endpoint == 'logout':
+        response = add_no_cache_headers(response)
+    return response
+
 #ルーティング定義
 @app.route("/")
 def top():
@@ -85,7 +100,10 @@ def login1():
 @app.route("/logout")
 def logout():
     session.pop('person_id', None)
-    return redirect(url_for('login'))
+    response = redirect(url_for('login'))
+    response = add_no_cache_headers(response)
+    return response
+
 
 
 @app.route("/insertHelth")
