@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行動記録表示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .record-table {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .record-table h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .record-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .record-table table, .record-table th, .record-table td {
+            border: 1px solid #ccc;
+        }
+
+        .record-table th, .record-table td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .record-table th {
+            background-color: #f2f2f2;
+        }
+
+        .record-table button {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="record-table">
+        <h1>行動記録</h1>
+        <table>
+            <tr>
+                <th>時間</th>
+                <td>{{ start }} ～ {{ stop }}</td>
+            </tr>
+            <tr>
+                <th>場所</th>
+                <td>
+                    {{ departure }} ～ 
+                    {% if transit_address1 %} {{ transit_address1 }} ～ {% endif %}
+                    {% if transit_address2 %} {{ transit_address2 }} ～ {% endif %}
+                    {% if transit_address3 %} {{ transit_address3 }} ～ {% endif %}
+                    {{ destination }}
+                </td>
+            </tr>
+            <tr>
+                <th>移動方法</th>
+                <td>{{ way }}</td>
+            </tr>
+            <tr>
+                <th>同行者</th>
+                <td>{{ accompanying if companion == "true" else "なし" }}</td>
+            </tr>
+            <tr>
+                <th>特記事項</th>
+                <td>{{ note }}</td>
+            </tr>
+        </table>
+        <a href="/top"><button>戻る</button></a>
+    </div>
+</body>
+</html>
