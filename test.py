@@ -26,7 +26,7 @@ def add_no_cache_headers(response):
 @app.before_request
 def before_request():
     # ログインが必要なページを定義
-    login_required_paths = ['/']
+    login_required_paths = ['/', '/top']
     if request.path in login_required_paths:
         if 'person_id' not in session:
             return redirect(url_for('login'))
@@ -99,7 +99,9 @@ def login1():
 @app.route("/logout")
 def logout():
     session.pop('person_id', None)
-    return redirect(url_for('login'))
+    response = redirect(url_for('login'))
+    response = add_no_cache_headers(response)
+    return response
 
 
 @app.route("/insertHelth")
