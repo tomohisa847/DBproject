@@ -12,6 +12,9 @@
             padding: 0;
             background-color: #f4f4f4;
         }
+        .separator {
+            margin: 0 5px;
+        }
 
         .conduct-form {
             max-width: 600px;
@@ -88,50 +91,97 @@
     </style>
 </head>
 
+
 <body>
-    <div class="conduct-form">
+    <form class="conduct-form" method="POST" action="/insertActivity2">
         <h1>行動記録フォーム</h1>
         <label for="time">時間</label>
         <div id="time">
             <label for="start">開始</label>
-            <input type="text" id="start">
+            <input type="datetime-local" name="start">
             <span class="separator">～</span>
             <label for="stop">終了</label>
-            <input type="text" id="stop">
+            <input type="datetime-local" name="stop">
         </div>
         <label for="place">場所</label>
         <div id="place">
             <label for="departure">出発</label>
-            <input type="text" id="departure">
+            <input type="text" name="departure">
+            <span class="separator">～</span>
+            <div id="transit_places">
+                <!-- 中継地点がここに追加されます -->
+            </div>
+            <button type="button" onclick="addTransitPlace()">中継地点を追加</button>
             <span class="separator">～</span>
             <label for="destination">到着</label>
-            <input type="text" id="destination">
+            <input type="text" name="destination">
         </div>
         <label for="way">移動方法</label>
         <div id="way">
-            <input type="checkbox" id="walk"><label for="walk">徒歩</label>
-            <input type="checkbox" id="car"><label for="car">車</label>
-            <input type="checkbox" id="bus"><label for="bus">バス</label>
-            <input type="checkbox" id="train"><label for="train">電車</label>
-            <input type="checkbox" id="other"><label for="other">その他</label>
+            <input type="radio" name="way" value="徒歩"><label for="walk">徒歩</label>
+            <input type="radio" name="way" value="車"><label for="car">車</label>
+            <input type="radio" name="way" value="バス"><label for="bus">バス</label>
+            <input type="radio" name="way" value="電車"><label for="train">電車</label>
+            <input type="radio" name="way" value="その他"><label for="other">その他</label>
         </div>
         <label for="companion">同行者有無</label>
         <div id="companion">
-            <input type="checkbox" id="yes"><label for="yes">あり</label>
-            <input type="checkbox" id="no"><label for="no">なし</label>
+            <input type="radio" name="companion" value="true" onclick="showHideDiv(true)"><label for="yes">あり</label>
+            <input type="radio" name="companion" value="false" onclick="showHideDiv(false)"><label for="no">なし</label>
         </div>
-        <div>
-            <label for="accompanying">同行者氏名</label>
-            <input type="text" id="accompanying">
+
+        <div id="accompanying_field" class="hidden">
+
         </div>
+
+        <input type="hidden" name="accompanying" id="hidden_accompanying" value="none">
+
         <div>
             <label for="note">特記事項</label>
             <br>
-            <textarea name="note" id="note"></textarea>
+            <textarea name="note" name="note"></textarea>
         </div>
-        <button id="submit">送信</button>
-        <button id="back">戻る</button>
-    </div>
-</body>
+        <input type="submit" value="送信">
+        <a href="/">戻る</a>
+    </form>
+    <script>
+        let transitCount = 0;
 
+        function addTransitPlace() {
+            if (transitCount < 3) {
+                transitCount++;
+                const transitPlacesDiv = document.getElementById('transit_places');
+                const newTransitDiv = document.createElement('div');
+                newTransitDiv.innerHTML = `
+                    <label for="transit_address${transitCount}">中継地点${transitCount}</label>
+                    <input type="text" name="transit_address${transitCount}">
+                    <span class="separator">～</span>
+                `;
+                transitPlacesDiv.appendChild(newTransitDiv);
+            } else {
+                alert("中継地点は最大3地点までです。");
+            }
+        }
+        function showHideDiv(show) {
+            const accompanyingField = document.getElementById("accompanying_field");
+            const newAccompanyingDiv = document.createElement('div');
+            if (show) {
+                accompanyingField.innerHTML=`
+                    <label for="accompanying">同行者氏名</label>
+                    <input type="text" name="accompanying" id="accompanying">
+                `;
+                accompanyingField.appendChild(newAccompanyingDiv);
+            } else {
+                
+                accompanyingField.innerHTML=``;
+                
+            }
+        }
+
+        // 初期状態を設定
+        document.addEventListener('DOMContentLoaded', () => {
+            showHideDiv(false);  // 初期状態は「なし」
+        });
+    </script>
+</body>
 </html>
