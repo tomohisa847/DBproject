@@ -123,7 +123,7 @@ def insertActivity2():
         exsit = 'あり'
     else:
         exsit = 'なし'
-    return render_template( "send-actionlog-show.html",
+    return render_template( "send-actionlog-confirm.html",
         title = "登録完了画面",
         message = f"""
                     以下の内容で登録しました。
