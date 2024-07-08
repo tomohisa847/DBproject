@@ -99,9 +99,7 @@ def login1():
 @app.route("/logout")
 def logout():
     session.pop('person_id', None)
-    response = redirect(url_for('login'))
-    response = add_no_cache_headers(response)
-    return response
+    return redirect(url_for('login'))
 
 
 @app.route("/insertHelth")
