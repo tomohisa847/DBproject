@@ -16,27 +16,13 @@ dsn = {
 app = Flask(__name__ ,static_folder="static")
 app.secret_key = 'your_secret_key'
 
-# キャッシュを無効化するための関数
-def add_no_cache_headers(response):
+@app.after_request
+def add_header(response):
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
     return response
 
-@app.before_request
-def before_request():
-    # ログインが必要なページを定義
-    login_required_paths = ['/']
-    if request.path in login_required_paths:
-        if 'person_id' not in session:
-            return redirect(url_for('login'))
-
-@app.after_request
-def after_request(response):
-    # ログアウト後のキャッシュを無効化
-    if request.endpoint == 'logout':
-        response = add_no_cache_headers(response)
-    return response
 
 #ルーティング定義
 @app.route("/")
@@ -99,9 +85,7 @@ def login1():
 @app.route("/logout")
 def logout():
     session.pop('person_id', None)
-    response = redirect(url_for('login'))
-    response = add_no_cache_headers(response)
-    return response
+    return redirect(url_for('login'))
 
 
 @app.route("/insertHelth")
