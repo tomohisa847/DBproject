@@ -16,8 +16,7 @@ dsn = {
 app = Flask(__name__ ,static_folder="static")
 app.secret_key = 'your_secret_key'
 
-@app.after_request
-def add_header(response):
+def add_no_cache_headers(response):
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
@@ -27,8 +26,10 @@ def add_header(response):
 @app.before_request
 def before_request():
     # ログインが必要なページを定義
-    login_required_paths = ['/', '/top']
-    if request.path in login_required_paths:
+    login_required_paths = ['/']
+    # ログインが不要なページを定義
+    login_exempt_paths = ['/login', '/login1']
+    if request.path not in login_exempt_paths:
         if 'person_id' not in session:
             return redirect(url_for('login'))
 
