@@ -11,7 +11,6 @@ dsn = {
     'password' : '1234',    #ユーザidに対応するパスワード
     'database' : 'DBproject' #オープンするデータベース名
 }
-
 #Flaskのコンストラクタ
 app = Flask(__name__ ,static_folder="static")
 app.secret_key = 'your_secret_key'
@@ -91,12 +90,22 @@ def login1():
         isPas = recset[0]['pass']
     
     if isId==person_id and isPas==password:
+        if isId=='S-USER01' and isPas=='12345':
+            session['person_id'] = person_id
+            return redirect(url_for('superuser'))
         session['person_id'] = person_id
         return redirect(url_for('top'))
     else:
         return render_template("debug.html",
             debug = 'ユーザーIDとパスワードどちらかが間違っています。'
         )
+    #ここまでの処理を終わりにしたいです。
+
+@app.route("/superuser")
+def superuser():
+    return render_template("top-superuser.html")
+
+
 
 @app.route("/logout")
 def logout():
