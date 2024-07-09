@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者用ページ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 300px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        #student-number {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .options input[type="radio"] {
+            display: none;
+        }
+
+        .options input[type="radio"] + span::before {
+            content: '';
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .options input[type="radio"]:checked + span::before {
+            background-color: #000;
+        }
+
+        .search-button {
+            background-color: #ccc;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>管理者用ページ</h1>
+        <form action="/search" method="POST">
+            <div class="input-group">
+                <label for="student-number">学籍番号を入力</label>
+                <input type="text" id="student-number" name="student_number" placeholder="学籍番号を入力" required>
+            </div>
+            <div class="options">
+                <label for="option1">
+                    <input type="radio" id="option1" name="option" value="体調観察表" checked>
+                    <span>体調観察表</span>
+                </label>
+                <label for="option2">
+                    <input type="radio" id="option2" name="option" value="行動記録表">
+                    <span>行動記録表</span>
+                </label>
+                <label for="option3">
+                    <input type="radio" id="option3" name="option" value="個人情報">
+                    <span>個人情報</span>
+                </label>
+            </div>
+            <button type="submit" class="search-button">検索</button>
+        </form>
+    </div>
+</body>
+</html>
