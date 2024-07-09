@@ -67,7 +67,7 @@ def top():
 @app.route("/login")
 def login():
     return render_template( "login.html")
-
+#ここに管理者がログイン出来るシステムをつくる
 @app.route("/login1",methods=["POST"])
 def login1():
     dbcon,cur = my_open( **dsn )
