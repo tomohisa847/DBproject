@@ -18,7 +18,7 @@ app = Flask(__name__ ,static_folder="static")
 @app.route("/")
 def top():
     dbcon,cur = my_open( **dsn )
-    person_id = 'S260007'
+    person_id = 'T220012'
     sqlstring = f"""
         SELECT *
         FROM PersonalInfo
@@ -37,10 +37,107 @@ def top():
     )
 
 
-@app.route("/insertHelth")
-def insertHelth():
+@app.route("/insertHealth") #insertHelth->insertHealthにつづりを変更
+def insertHealth():
+    person_id = 'T220012'
+    return render_template("send-body-health.html",
+        person_id=person_id
+    )
+
+@app.route("/insertHealth2",methods=["POST"]) #情報の書き込み
+def insertHealth2():
+
+    #send-body-health.htmlから情報取得
+    person_id = request.form["person_id"]
+    temperature = request.form["temperature"]
+
+    joint_pain = request.form.get("arthralgia") 
+    fatigue = request.form.get("sluggishness")
+    headache = request.form.get("headache")
+    sore_throat = request.form.get("pharyngalgia")
+    shortness_of_breath = request.form.get("breathlessness")
+    cough_sneeze = request.form.get("cough")
+    nausea_vomiting = request.form.get("nausea")
+    stomach_ache_diarrhea = request.form.get("stomachache")
+    taste_disorder = request.form.get("dysgeusia")
+    smell_disorder = request.form.get("olfactory disorder")
+
+    #値を取得できなかった場合、変数にfalseを格納
+    if joint_pain==None: 
+        joint_pain='false'
+
+    if fatigue==None: 
+        fatigue='false'
+
+    if headache==None: 
+        headache='false'
+
+    if sore_throat==None: 
+       sore_throat='false'
+
+    if shortness_of_breath==None: 
+       shortness_of_breath='false'
+
+    if cough_sneeze==None: 
+       cough_sneeze='false'
+
+    if nausea_vomiting==None: 
+       nausea_vomiting='false'
+    
+    if stomach_ache_diarrhea==None: 
+       stomach_ache_diarrhea='false'
+
+    if taste_disorder==None: 
+       taste_disorder='false'
+
+    if smell_disorder==None: 
+       smell_disorder='false'
+    
+    
+    #現在の時間取得
+    import datetime
+    health_date = datetime.date.today()
+
     dbcon,cur = my_open( **dsn )
-    person_id = 'S260009'
+   
+    sqlstring = f"""
+        INSERT INTO HealthStatus
+        (person_id,
+        temperature,
+        joint_pain,
+        fatigue,
+        headache,
+        sore_throat,
+        shortness_of_breath,
+        cough_sneeze,
+        nausea_vomiting,
+        stomach_ache_diarrhea,
+        taste_disorder,
+        smell_disorder,
+        health_date,
+        delflag)
+        VALUES
+        ('{person_id}',
+        {temperature},
+        {joint_pain},
+        {fatigue},
+        {headache},
+        {sore_throat},
+        {shortness_of_breath},
+        {cough_sneeze},
+        {nausea_vomiting},
+        {stomach_ache_diarrhea},
+        {taste_disorder},
+        {smell_disorder},
+        '{health_date}',
+        false)
+        ;
+    """
+    my_query(sqlstring,cur)
+
+    #テーブルに書き込み
+    dbcon.commit() 
+
     sqlstring = f"""
         SELECT *
         FROM PersonalInfo
@@ -54,10 +151,9 @@ def insertHelth():
     else:
         namae = "Name not found"
     my_close(dbcon, cur)
-    return render_template( "top.html",
-        namae=namae
+    return render_template("top.html",
+                        namae=namae
     )
-
 
 @app.route("/insetActivity")
 def insetActivity():
