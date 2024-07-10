@@ -155,6 +155,49 @@ def insertHealth2():
                         namae=namae
     )
 
+@app.route("/showHealth") 
+def showHealth():
+    person_id = 'T220012'
+
+    dbcon,cur = my_open( **dsn )
+
+    #ユーザの健康管理記録を取得
+    sqlstring = f"""
+        SELECT *
+        FROM HealthStatus
+        WHERE person_id = '{person_id}'
+        AND delflag=false
+        ;
+    """
+    my_query(sqlstring,cur)
+    recset = pd.DataFrame(cur.fetchall())
+    
+    #ユーザ名の取得
+    sqlstring = f"""
+        SELECT *
+        FROM PersonalInfo
+        WHERE person_id = '{person_id}'
+        ;
+    """
+    my_query(sqlstring,cur)
+    recset2 = cur.fetchall()
+    my_close(dbcon, cur)
+    if recset2:
+        namae = recset2[0]['u_name']  # 辞書形式で取得
+    else:
+        namae = "Name not found"
+
+    my_close(dbcon, cur)
+
+    print(recset)
+
+    return render_template("show-body-health.html",
+        title="健康管理記録",
+        table_data=recset,
+        namae = namae
+    )
+
+
 @app.route("/insetActivity")
 def insetActivity():
 
