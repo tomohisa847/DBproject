@@ -105,7 +105,27 @@ def login1():
 def superuser():
     return render_template("top-superuser.html")
 
-
+@app.route("/search")
+def search():
+    dbcon,cur = my_open( **dsn )
+    student_number = request.form["student_number"]
+    option = request.form["option"]
+    if option == "体調観察表":
+        tableName = 'HealthStatus'
+    if else option == "行動記録表":
+        tableName = 'ActivityLog'
+    else:
+        tableName = 'PersonalInfo'
+    
+    sqlstring = f""" 
+        select *
+        from {tableName}
+        ;
+    """
+    my_query(sqlstring,cur)
+    recset = cur.fetchall()
+    return render_template("show-superuser.html")
+    
 
 @app.route("/logout")
 def logout():
