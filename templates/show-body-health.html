@@ -33,8 +33,9 @@
             <th>削除</th>
             {% for row_data in table_data.values %}
                 <td>
-                    <form action="/delete_record" method="post">
+                    <form action="/deleteHealth" method="post">
                         <input type="hidden" name="record_id" value="{{ row_data[0] }}">
+                        <input type="hidden" name="person_id" value="{{ row_data[1] }}">
                         <button type="submit">削除</button>
                     </form>
                 </td>

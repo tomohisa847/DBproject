@@ -197,6 +197,61 @@ def showHealth():
         namae = namae
     )
 
+@app.route("/deleteHealth",methods=["POST"]) 
+def deleteHealth():
+    #ユーザのIDとテーブルのIDを取得
+    person_id = request.form["person_id"]
+    symptom_id=request.form["record_id"]
+
+    dbcon,cur = my_open( **dsn )
+
+    #delfalgをtrueに変更
+    sqlstring = f"""
+        UPDATE HealthStatus
+        SET delflag = true
+        WHERE symptom_id = {symptom_id}
+        ;
+    """
+    my_query(sqlstring,cur)
+   
+   #テーブルに書き込み
+    dbcon.commit()  
+
+
+   #ユーザの健康管理記録を取得
+    sqlstring = f"""
+        SELECT *
+        FROM HealthStatus
+        WHERE person_id = '{person_id}'
+        AND delflag=false
+        ;
+    """
+    my_query(sqlstring,cur)
+    recset = pd.DataFrame(cur.fetchall())
+    
+    #ユーザ名の取得
+    sqlstring = f"""
+        SELECT *
+        FROM PersonalInfo
+        WHERE person_id = '{person_id}'
+        ;
+    """
+    my_query(sqlstring,cur)
+    recset2 = cur.fetchall()
+    my_close(dbcon, cur)
+    if recset2:
+        namae = recset2[0]['u_name']  # 辞書形式で取得
+    else:
+        namae = "Name not found"
+
+    my_close(dbcon, cur)
+
+    return render_template("show-body-health.html",
+        title="健康管理記録",
+        table_data=recset,
+        namae = namae
+    )
+
 
 @app.route("/insetActivity")
 def insetActivity():
