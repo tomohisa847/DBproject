@@ -264,8 +264,7 @@ def deleteHealth():
     """
     my_query(sqlstring,cur)
     recset = pd.DataFrame(cur.fetchall())
-    
-
+    namae = recset[0]['u_name']
 
 
     return render_template("show-body-health.html",
