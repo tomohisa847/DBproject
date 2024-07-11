@@ -37,3 +37,7 @@ INSERT INTO PersonalInfo (person_id, pass, affiliation, position, phone_number, 
 ('S280008', '1234', '化学科', '学生', '0808899001', 'student8@university.com', '鈴木 八郎'),
 ('S290009', '1234', '生物科', '学生', '0809900112', 'student9@university.com', '加藤 九郎'),
 ('S300010', '1234', '地学科', '学生', '0801011122', 'student10@university.com', '久保 十郎');
+
+---- PersonalInfoテーブルに管理者データを挿入
+INSERT INTO PersonalInfo (person_id, pass, affiliation, position, phone_number, email, u_name) VALUES 
+('S-USER01', '12345', '管理者', '管理者', '08077665656', 'superuser1@university.com', '管理者');

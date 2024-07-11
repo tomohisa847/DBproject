@@ -11,24 +11,24 @@ dsn = {
     'password' : '1234',    #ユーザidに対応するパスワード
     'database' : 'DBproject' #オープンするデータベース名
 }
-
 #Flaskのコンストラクタ
 app = Flask(__name__ ,static_folder="static")
 app.secret_key = 'your_secret_key'
-
-@app.after_request
-def add_header(response):
+#これないと終わる。
+def add_no_cache_headers(response):
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
     return response
 
-
+#tesuttesto
 @app.before_request
 def before_request():
     # ログインが必要なページを定義
-    login_required_paths = ['/', '/top']
-    if request.path in login_required_paths:
+    login_required_paths = ['/']
+    # ログインが不要なページを定義
+    login_exempt_paths = ['/login', '/login1']
+    if request.path not in login_exempt_paths:
         if 'person_id' not in session:
             return redirect(url_for('login'))
 #testとりあえず保留
@@ -66,7 +66,7 @@ def top():
 @app.route("/login")
 def login():
     return render_template( "login.html")
-
+#ここに管理者がログイン出来るシステムをつくる
 @app.route("/login1",methods=["POST"])
 def login1():
     dbcon,cur = my_open( **dsn )
@@ -90,12 +90,56 @@ def login1():
         isPas = recset[0]['pass']
     
     if isId==person_id and isPas==password:
+        if isId=='S-USER01' and isPas=='12345':
+            session['person_id'] = person_id
+            return redirect(url_for('superuser'))
         session['person_id'] = person_id
         return redirect(url_for('top'))
     else:
         return render_template("debug.html",
             debug = 'ユーザーIDとパスワードどちらかが間違っています。'
         )
+    #ここまでの処理を終わりにしたいです。
+
+@app.route("/superuser")
+def superuser():
+    return render_template("top-superuser.html")
+
+@app.route("/search",methods=["POST","GET"])
+def search():
+    dbcon,cur = my_open( **dsn )
+    person_id = request.form["person_id"]
+    option = request.form["option"]
+
+    if option == "health_observation":
+        tableName = 'HealthStatus'
+    elif option == "activity_record":
+        tableName = 'ActivityLog'
+    elif option == "personal_information":
+        tableName = 'PersonalInfo'
+        sqlstring = f""" 
+            select affiliation,position,phone_number,email,u_name
+            from {tableName}
+            where person_id = '{person_id}'
+            ;
+        """    
+        my_query(sqlstring,cur)
+        recset = cur.fetchall()
+        row_data = recset[0]
+        print(row_data)
+        return render_template("show-superuser-personalinfo.html",
+            title = "管理者用個人情報参照画面",
+            person_id = person_id,
+            row_data = row_data
+        )
+    else:
+        #同行者の名前を出すための処理とhtmlを作成
+        return "Invalid option"
+    
+
+    
+
+    
 
 @app.route("/logout")
 def logout():
