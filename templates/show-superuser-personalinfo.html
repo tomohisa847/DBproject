@@ -39,10 +39,9 @@
 
 <body>
     <h1>{{title}}</h1>
-    <h2>{{ row_data[0] }}</h2>
+    <h2>{{ person_id }}</h2>
     <table border>
-        {% set items = ['名前','所属','役職','電話番号','メールアドレス'] %}
-        {% for index in range(items|length) %}
+        {{% set items = ['名前','所属','役職','電話番号','メールアドレス'] %}}
         <tr>
             <th>{{ items[index] }}</th>
             {% for row_data in table_data.values %}
@@ -56,7 +55,7 @@
         {% endfor %}
     </table>
     <br>
-    <button id="back" type="button">戻る</button>
+    <button id="back" type="button" action="/search">戻る</button>
 
     <script>
         document.getElementById('back').addEventListener('click', function () {

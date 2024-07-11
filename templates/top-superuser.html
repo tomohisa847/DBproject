@@ -103,10 +103,10 @@
 <body>
     <div class="main-container">
         <h1>管理者用ページ</h1>
-        <form id="search-form" action="" method="GET">
+        <form id="search-form" action="/search" method="POST">
             <div class="input-group">
                 <label for="student-number">学籍番号を入力</label>
-                <input type="text" id="student-number" name="student_number" placeholder="学籍番号を入力" required>
+                <input type="text" id="student-number" name="person_id" placeholder="学籍番号を入力" required>
             </div>
             <ul class="options">
                 <li>
@@ -134,38 +134,9 @@
                     </label>
                 </li>
             </ul>
-            <a href="#" id="search-link" class="search-button">検索</a>
+            <input type="submit" class="search-button" id="search-link" value="検索">
         </form>
     </div>
 
-    <script>
-        document.getElementById('search-link').addEventListener('click', function(event) {
-            event.preventDefault(); // デフォルトのリンク動作を防ぐ
-
-            const studentNumber = document.getElementById('student-number').value;
-            const selectedOption = document.querySelector('input[name="option"]:checked').value;
-
-            let url;
-            switch (selectedOption) {
-                case 'health_observation':
-                    url = `/health_observation/${studentNumber}`;
-                    break;
-                case 'activity_record':
-                    url = `/activity_record/${studentNumber}`;
-                    break;
-                case 'personal_information':
-                    url = `/personal_information/${studentNumber}`;
-                    break;
-                case 'companions':
-                    url = `/companions/${studentNumber}`;
-                    break;
-                default:
-                    url = '#';
-                    break;
-            }
-
-            window.location.href = url; // 新しいURLにリダイレクト
-        });
-    </script>
 </body>
 </html>
