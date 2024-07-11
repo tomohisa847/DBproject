@@ -31,7 +31,7 @@ def before_request():
     if request.path in login_required_paths:
         if 'person_id' not in session:
             return redirect(url_for('login'))
-
+#testとりあえず保留
 @app.after_request
 def after_request(response):
     # ログアウト後のキャッシュを無効化
