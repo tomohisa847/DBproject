@@ -105,7 +105,7 @@ def login1():
 def superuser():
     return render_template("top-superuser.html")
 
-@app.route("/search",methods=["POST"])
+@app.route("/search",methods=["POST","GET"])
 def search():
     dbcon,cur = my_open( **dsn )
     person_id = request.form["person_id"]
@@ -118,21 +118,19 @@ def search():
     elif option == "personal_information":
         tableName = 'PersonalInfo'
         sqlstring = f""" 
-            select person_id,affiliation,position,phone_number,email,u_name
+            select affiliation,position,phone_number,email,u_name
             from {tableName}
             where person_id = '{person_id}'
             ;
         """    
         my_query(sqlstring,cur)
         recset = cur.fetchall()
-        affiliation = recset[0]["affiliation"]
-        position = recset[0]["position"]
-        phone_number = recset[0]["phone_number"]
-        email = recset[0]["email"]
-        u_name = recset[0]["u_name"]
+        row_data = recset[0]
+        print(row_data)
         return render_template("show-superuser-personalinfo.html",
             title = "管理者用個人情報参照画面",
             person_id = person_id,
+            row_data = row_data
             
             
             

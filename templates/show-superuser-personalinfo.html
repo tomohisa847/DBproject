@@ -41,25 +41,21 @@
     <h1>{{title}}</h1>
     <h2>{{person_id}}</h2>
     <table border>
-        {{% set items = ['名前','所属','役職','電話番号','メールアドレス'] %}}
+        {% set items = ['名前','所属','役職','電話番号','メールアドレス'] %}
+        {% set values = ['u_name','affiliation','position','phone_number','email'] %}
+        {% for index in range(items|length) %}
         <tr>
-            <th>{{ items[index] }}</th>
-            {% for row_data in table_data.values %}
-            {% if index == 6 %}
-            <td>{{row_data[6]}}</td>
-            {% else %}
-            <td>{{row_data[index + 1]}}</td>
-            {% endif %}
-            {% endfor %}
+            <td>{{items[index]}}</td>
+            <td>{{ row_data[values[index]] }}</td>
         </tr>
         {% endfor %}
     </table>
     <br>
-    <button id="back" type="button" action="/search">戻る</button>
+    <button id="back" type="button">戻る</button>
 
     <script>
         document.getElementById('back').addEventListener('click', function () {
-            window.location.href = '/top';
+            window.location.href = '/superuser';
         });
     </script>
 </body>
