@@ -105,26 +105,40 @@ def login1():
 def superuser():
     return render_template("top-superuser.html")
 
-@app.route("/search")
+@app.route("/search",methods=["POST","GET"])
 def search():
     dbcon,cur = my_open( **dsn )
-    student_number = request.form["student_number"]
+    person_id = request.form["person_id"]
     option = request.form["option"]
-    if option == "体調観察表":
+
+    if option == "health_observation":
         tableName = 'HealthStatus'
-    if else option == "行動記録表":
+    elif option == "activity_record":
         tableName = 'ActivityLog'
-    else:
+    elif option == "personal_information":
         tableName = 'PersonalInfo'
+        sqlstring = f""" 
+            select affiliation,position,phone_number,email,u_name
+            from {tableName}
+            where person_id = '{person_id}'
+            ;
+        """    
+        my_query(sqlstring,cur)
+        recset = cur.fetchall()
+        row_data = recset[0]
+        print(row_data)
+        return render_template("show-superuser-personalinfo.html",
+            title = "管理者用個人情報参照画面",
+            person_id = person_id,
+            row_data = row_data
+        )
+    else:
+        #同行者の名前を出すための処理とhtmlを作成
+        return "Invalid option"
     
-    sqlstring = f""" 
-        select *
-        from {tableName}
-        ;
-    """
-    my_query(sqlstring,cur)
-    recset = cur.fetchall()
-    return render_template("show-superuser.html")
+
+    
+
     
 
 @app.route("/logout")
