@@ -112,7 +112,7 @@ def search():
     option = request.form["option"]
     if option == "体調観察表":
         tableName = 'HealthStatus'
-    if else option == "行動記録表":
+    else if option == "行動記録表":
         tableName = 'ActivityLog'
     else:
         tableName = 'PersonalInfo'
