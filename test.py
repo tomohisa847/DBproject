@@ -14,14 +14,14 @@ dsn = {
 #Flaskのコンストラクタ
 app = Flask(__name__ ,static_folder="static")
 app.secret_key = 'your_secret_key'
-
+#これないと終わる。
 def add_no_cache_headers(response):
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
     return response
 
-
+#tesuttesto
 @app.before_request
 def before_request():
     # ログインが必要なページを定義
