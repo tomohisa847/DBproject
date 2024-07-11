@@ -21,8 +21,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
-        .record-table h1 {
+.record-table h1 {
             text-align: center;
             margin-bottom: 20px;
         }
@@ -60,58 +59,57 @@
     <div class="record-table">
         <h1>行動記録</h1>
         <table>
-            {% for record in records %}
-            <tr class="expandable" onclick="toggleDetails('details{{ loop.index }}')">
-                <th>{{ record[0] }}</th> <!-- 日付 -->
-                <td>{{ record[1] }}</td> <!-- 時間 -->
-            </tr>
-            <tr id="details{{ loop.index }}" class="hidden">
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <th>時間</th>
-                            <td>{{ record[1] }} ～ {{ record[2] }}</td>
-                        </tr>
-                        <tr>
-                            <th>場所</th>
-                            <td>
-                                {{ record[3] }} ～ 
-                                {% if record[4] %} {{ record[4] }} ～ {% endif %}
-                                {% if record[5] %} {{ record[5] }} ～ {% endif %}
-                                {% if record[6] %} {{ record[6] }} ～ {% endif %}
-                                {{ record[7] }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>移動方法</th>
-                            <td>{{ record[8] }}</td>
-                        </tr>
-                        <tr>
-                            <th>同行者</th>
-                            <td>{{ record[9] if record[9] else "なし" }}</td>
-                        </tr>
-                        <tr>
-                            <th>特記事項</th>
-                            <td>{{ record[10] }}</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-        <a href="/"><button>戻る</button></a>
-    </div>
-
-    <script>
-        function toggleDetails(id) {
-            var details = document.getElementById(id);
-            if (details.classList.contains('hidden')) {
-                details.classList.remove('hidden');
-            } else {
-                details.classList.add('hidden');
-            }
-        }
-    </script>
+                    {% for record in records %}
+                    <tr class="expandable" onclick="toggleDetails('details{{ loop.index }}')">
+                        <th colspan="2">{{ record['start_time'] }}</th> 
+                    </tr>
+                    <tr id="details{{ loop.index }}" class="hidden">
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <th>時間</th>
+                                    <td>{{ record['start_time'] }} ～ {{ record['end_time'] }}</td> <!-- 'start_time' と 'end_time' は実際のカラム名に変更 -->
+                                </tr>
+                                <tr>
+                                    <th>場所</th>
+                                    <td>
+                                        {{ record['departure_address'] }} ～ 
+                                        {% if record['transit_address1'] %} {{ record['transit_address1'] }} ～ {% endif %}
+                                        {% if record['transit_address2'] %} {{ record['transit_address2'] }} ～ {% endif %}
+                                        {% if record['transit_address3'] %} {{ record['transit_address3'] }} ～ {% endif %}
+                                        {{ record['arrival_address'] }} 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>移動方法</th>
+                                    <td>{{ record['transport_method'] }}</td> <!-- 'transport_method' は実際のカラム名に変更 -->
+                                </tr>
+                                <tr>
+                                    <th>同行者</th>
+                                    <td>{{ record['companion'] if record['companion'] else "なし" }}</td> <!-- 'companion' は実際のカラム名に変更 -->
+                                </tr>
+                                <tr>
+                                    <th>特記事項</th>
+                                    <td>{{ record['special_notes'] }}</td> <!-- 'notes' は実際のカラム名に変更 -->
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <a href="/"><button>戻る</button></a>
+            </div>
+        
+            <script>
+                function toggleDetails(id) {
+                    var details = document.getElementById(id);
+                    if (details.classList.contains('hidden')) {
+                        details.classList.remove('hidden');
+                    } else {
+                        details.classList.add('hidden');
+                    }
+                }
+            </script>
 </body>
 
 </html>

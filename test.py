@@ -101,7 +101,7 @@ def insertActivity2():
     #SQLオープン
     dbcon,cur = my_open( **dsn )
     #とりあえずpersonIDはこれ
-    person_id = 'S260007'
+    person_id = 'S260006'
 
     #SQL INSERTの場所
     sqlstring = f"""
@@ -141,6 +141,28 @@ def insertActivity2():
                 """
     )
 
+@app.route("/showActivity",methods=['GET','POST'])
+def showActivity():
+    dbcon,cur = my_open( **dsn )
+    person_id = 'S260006'
+    sqlstring = f"""
+    SELECT *
+    FROM  ActivityLog
+    WHERE person_id = '{person_id}'
+    AND delflag=false
+    ;
+    """
+    my_query(sqlstring,cur)
+    recset = pd.DataFrame(cur.fetchall())
+
+    #データフレーム内の各値を格納
+    recset.columns = [desc[0] for desc in cur.description]
+
+    records = recset.to_dict('records')
+    
+    print(records)
+    my_close(dbcon, cur)
+    return render_template("show-actionlog.html", records=records)
 
 #プログラム起動
 app.run(host="localhost",port=5000,debug=True)
