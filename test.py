@@ -131,9 +131,6 @@ def search():
             title = "管理者用個人情報参照画面",
             person_id = person_id,
             row_data = row_data
-            
-            
-            
         )
     else:
         #同行者の名前を出すための処理とhtmlを作成
