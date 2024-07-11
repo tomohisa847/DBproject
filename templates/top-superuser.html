@@ -7,16 +7,31 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-        }
-
-        .container {
-            width: 300px;
-            margin: 50px auto;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
             text-align: center;
         }
 
+        .main-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            max-width: 100%;
+        }
+
         h1 {
-            font-size: 1.2em;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
             margin-bottom: 20px;
         }
 
@@ -32,22 +47,29 @@
         }
 
         .options {
-            display: flex;
-            justify-content: space-around;
+            list-style-type: none;
+            padding: 0;
             margin-bottom: 20px;
         }
 
-        .options label {
+        .options li {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        label {
             display: flex;
             align-items: center;
             gap: 5px;
         }
 
-        .options input[type="radio"] {
+        input[type="radio"] {
             display: none;
         }
 
-        .options input[type="radio"] + span::before {
+        input[type="radio"] + span::before {
             content: '';
             display: inline-block;
             width: 14px;
@@ -57,43 +79,93 @@
             margin-right: 5px;
         }
 
-        .options input[type="radio"]:checked + span::before {
+        input[type="radio"]:checked + span::before {
             background-color: #000;
         }
 
         .search-button {
-            background-color: #ccc;
+            background-color: #e0e0e0;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
+            text-decoration: none;
+            color: #000;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .search-button:hover {
+            background-color: #ccc;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="main-container">
         <h1>管理者用ページ</h1>
-        <form action="/search" method="POST">
+        <form id="search-form" action="" method="GET">
             <div class="input-group">
                 <label for="student-number">学籍番号を入力</label>
                 <input type="text" id="student-number" name="student_number" placeholder="学籍番号を入力" required>
             </div>
-            <div class="options">
-                <label for="option1">
-                    <input type="radio" id="option1" name="option" value="体調観察表" checked>
-                    <span>体調観察表</span>
-                </label>
-                <label for="option2">
-                    <input type="radio" id="option2" name="option" value="行動記録表">
-                    <span>行動記録表</span>
-                </label>
-                <label for="option3">
-                    <input type="radio" id="option3" name="option" value="個人情報">
-                    <span>個人情報</span>
-                </label>
-            </div>
-            <button type="submit" class="search-button">検索</button>
+            <ul class="options">
+                <li>
+                    <label for="option1">
+                        <input type="radio" id="option1" name="option" value="health_observation" checked>
+                        <span>体調観察表</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="option2">
+                        <input type="radio" id="option2" name="option" value="activity_record">
+                        <span>行動記録表</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="option3">
+                        <input type="radio" id="option3" name="option" value="personal_information">
+                        <span>個人情報</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="option4">
+                        <input type="radio" id="option4" name="option" value="companions">
+                        <span>同行者</span>
+                    </label>
+                </li>
+            </ul>
+            <a href="#" id="search-link" class="search-button">検索</a>
         </form>
     </div>
+
+    <script>
+        document.getElementById('search-link').addEventListener('click', function(event) {
+            event.preventDefault(); // デフォルトのリンク動作を防ぐ
+
+            const studentNumber = document.getElementById('student-number').value;
+            const selectedOption = document.querySelector('input[name="option"]:checked').value;
+
+            let url;
+            switch (selectedOption) {
+                case 'health_observation':
+                    url = `/health_observation/${studentNumber}`;
+                    break;
+                case 'activity_record':
+                    url = `/activity_record/${studentNumber}`;
+                    break;
+                case 'personal_information':
+                    url = `/personal_information/${studentNumber}`;
+                    break;
+                case 'companions':
+                    url = `/companions/${studentNumber}`;
+                    break;
+                default:
+                    url = '#';
+                    break;
+            }
+
+            window.location.href = url; // 新しいURLにリダイレクト
+        });
+    </script>
 </body>
 </html>
