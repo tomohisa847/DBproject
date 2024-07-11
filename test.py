@@ -11,7 +11,6 @@ dsn = {
     'password' : '1234',    #ユーザidに対応するパスワード
     'database' : 'DBproject' #オープンするデータベース名
 }
-
 #Flaskのコンストラクタ
 app = Flask(__name__ ,static_folder="static")
 app.secret_key = 'your_secret_key'
@@ -67,7 +66,7 @@ def top():
 @app.route("/login")
 def login():
     return render_template( "login.html")
-
+#ここに管理者がログイン出来るシステムをつくる
 @app.route("/login1",methods=["POST"])
 def login1():
     dbcon,cur = my_open( **dsn )
@@ -91,12 +90,42 @@ def login1():
         isPas = recset[0]['pass']
     
     if isId==person_id and isPas==password:
+        if isId=='S-USER01' and isPas=='12345':
+            session['person_id'] = person_id
+            return redirect(url_for('superuser'))
         session['person_id'] = person_id
         return redirect(url_for('top'))
     else:
         return render_template("debug.html",
             debug = 'ユーザーIDとパスワードどちらかが間違っています。'
         )
+    #ここまでの処理を終わりにしたいです。
+
+@app.route("/superuser")
+def superuser():
+    return render_template("top-superuser.html")
+
+@app.route("/search")
+def search():
+    dbcon,cur = my_open( **dsn )
+    student_number = request.form["student_number"]
+    option = request.form["option"]
+    if option == "体調観察表":
+        tableName = 'HealthStatus'
+    if else option == "行動記録表":
+        tableName = 'ActivityLog'
+    else:
+        tableName = 'PersonalInfo'
+    
+    sqlstring = f""" 
+        select *
+        from {tableName}
+        ;
+    """
+    my_query(sqlstring,cur)
+    recset = cur.fetchall()
+    return render_template("show-superuser.html")
+    
 
 @app.route("/logout")
 def logout():
