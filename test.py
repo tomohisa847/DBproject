@@ -105,14 +105,14 @@ def login1():
 def superuser():
     return render_template("top-superuser.html")
 
-@app.route("/search")
+@app.route("/search",methods=["POST"])
 def search():
     dbcon,cur = my_open( **dsn )
     student_number = request.form["student_number"]
     option = request.form["option"]
     if option == "体調観察表":
         tableName = 'HealthStatus'
-    else if option == "行動記録表":
+    elif option == "行動記録表":
         tableName = 'ActivityLog'
     else:
         tableName = 'PersonalInfo'
