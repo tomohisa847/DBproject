@@ -124,6 +124,24 @@ def search():
     #体調管理画面
     if option == "health_observation":
         tableName = 'HealthStatus'
+        #ユーザの健康管理記録を取得
+        sqlstring = f"""
+            SELECT *
+            FROM HealthStatus
+            WHERE person_id = '{person_id}'
+            AND delflag=false
+            ;
+        """
+        my_query(sqlstring,cur)
+        recset = pd.DataFrame(cur.fetchall())
+        my_close(dbcon, cur)
+        namae = recset[0]['u_name']
+        return render_template("show-superuser-bodyhealth.html",
+            title="健康管理記録",
+            table_data=recset,
+            namae = namae
+        )
+
     #行動記録画面
     elif option == "activity_record":
         tableName = 'ActivityLog'
