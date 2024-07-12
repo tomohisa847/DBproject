@@ -21,9 +21,16 @@ def add_no_cache_headers(response):
     response.headers['Expires'] = '-1'
     return response
 
+# 起動時に一度だけ実行されるフラグ
+initial_run = True
+
 #tesuttesto
 @app.before_request
 def before_request():
+    global initial_run
+    if initial_run:
+        session.clear()
+        initial_run = False
     # ログインが必要なページを定義
     login_required_paths = ['/']
     # ログインが不要なページを定義
@@ -31,6 +38,9 @@ def before_request():
     if request.path not in login_exempt_paths:
         if 'person_id' not in session:
             return redirect(url_for('login'))
+
+
+
 #testとりあえず保留
 @app.after_request
 def after_request(response):
