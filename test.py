@@ -106,6 +106,7 @@ def login1():
         session['person_id'] = person_id
         return redirect(url_for('top'))
     else:
+        session.clear()
         return render_template("debug.html",
             debug = 'ユーザーIDとパスワードどちらかが間違っています。'
         )
