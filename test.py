@@ -177,6 +177,7 @@ def search():
             person_id = person_id,
             row_data = row_data
         )
+    #同行者名を表示
     else:
         #同行者の名前を出すための処理とhtmlを作成
         return "Invalid option"
