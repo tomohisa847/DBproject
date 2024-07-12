@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者用ページ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .main-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            max-width: 100%;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        #student-number {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .options {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .options li {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"] + span::before {
+            content: '';
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        input[type="radio"]:checked + span::before {
+            background-color: #000;
+        }
+
+        .search-button {
+            background-color: #e0e0e0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #000;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .search-button:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1>管理者用ページ</h1>
+        <form id="search-form" action="/search" method="POST">
+            <div class="input-group">
+                <label for="student-number">学籍番号を入力</label>
+                <input type="text" id="student-number" name="person_id" placeholder="学籍番号を入力" required>
+            </div>
+            <ul class="options">
+                <li>
+                    <label for="option1">
+                        <input type="radio" id="option1" name="option" value="health_observation" checked>
+                        <span>体調観察表</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="option2">
+                        <input type="radio" id="option2" name="option" value="activity_record">
+                        <span>行動記録表</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="option3">
+                        <input type="radio" id="option3" name="option" value="personal_information">
+                        <span>個人情報</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="option4">
+                        <input type="radio" id="option4" name="option" value="companions">
+                        <span>同行者</span>
+                    </label>
+                </li>
+            </ul>
+            <input type="submit" class="search-button" id="search-link" value="検索">
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,8 +1,8 @@
 from MyDatabase import my_open , my_query , my_close
 import pandas as pd
+import sqlite3
+from flask import Flask, request, render_template, session, redirect, url_for, make_response
 import datetime
-
-
 #Data Source Nameのパラメータを辞書型変数で定義
 dsn = {
     'host' : '172.30.0.10',  #ホスト名(IPアドレス)
@@ -11,16 +11,41 @@ dsn = {
     'password' : '1234',    #ユーザidに対応するパスワード
     'database' : 'DBproject' #オープンするデータベース名
 }
-
-from flask import Flask,render_template ,request
 #Flaskのコンストラクタ
 app = Flask(__name__ ,static_folder="static")
+app.secret_key = 'your_secret_key'
+#これないと終わる。
+def add_no_cache_headers(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '-1'
+    return response
+
+#tesuttesto
+@app.before_request
+def before_request():
+    # ログインが必要なページを定義
+    login_required_paths = ['/']
+    # ログインが不要なページを定義
+    login_exempt_paths = ['/login', '/login1']
+    if request.path not in login_exempt_paths:
+        if 'person_id' not in session:
+            return redirect(url_for('login'))
+#testとりあえず保留
+@app.after_request
+def after_request(response):
+    # ログアウト後のキャッシュを無効化
+    if request.endpoint == 'logout':
+        response = add_no_cache_headers(response)
+    return response
 
 #ルーティング定義
 @app.route("/")
 def top():
+    if 'person_id' not in session:
+        return redirect(url_for('login'))
     dbcon,cur = my_open( **dsn )
-    person_id = 'S260007'
+    person_id = session['person_id']
     sqlstring = f"""
         SELECT *
         FROM PersonalInfo
@@ -38,26 +63,258 @@ def top():
         namae=namae
     )
 
-
-@app.route("/insertHelth")
-def insertHelth():
+@app.route("/login")
+def login():
+    return render_template( "login.html")
+#ここに管理者がログイン出来るシステムをつくる
+@app.route("/login1",methods=["POST"])
+def login1():
     dbcon,cur = my_open( **dsn )
-    person_id = 'S260007'
-    sqlstring = f"""
-        SELECT *
-        FROM PersonalInfo
-        WHERE person_id = '{person_id}'
+    person_id = request.form["username"]
+    password = request.form["password"]
+    sqlstring =f"""
+        select person_id,pass
+        from PersonalInfo
+        where person_id ='{person_id}' and pass ='{password}'
         ;
     """
     my_query(sqlstring,cur)
     recset = cur.fetchall()
-    if recset:
-        namae = recset[0]['u_name']  # 辞書形式で取得
+    my_close(dbcon,cur)
+    print(recset)
+    if len(recset)==0:
+        isId='null'
+        isPas='null'
     else:
-        namae = "Name not found"
+        isId = recset[0]["person_id"]
+        isPas = recset[0]['pass']
+    
+    if isId==person_id and isPas==password:
+        if isId=='S-USER01' and isPas=='12345':
+            session['person_id'] = person_id
+            return redirect(url_for('superuser'))
+        session['person_id'] = person_id
+        return redirect(url_for('top'))
+    else:
+        return render_template("debug.html",
+            debug = 'ユーザーIDとパスワードどちらかが間違っています。'
+        )
+    #ここまでの処理を終わりにしたいです。
+
+@app.route("/superuser")
+def superuser():
+    return render_template("top-superuser.html")
+
+@app.route("/search",methods=["POST","GET"])
+def search():
+    dbcon,cur = my_open( **dsn )
+    person_id = request.form["person_id"]
+    option = request.form["option"]
+
+    if option == "health_observation":
+        tableName = 'HealthStatus'
+    elif option == "activity_record":
+        tableName = 'ActivityLog'
+    elif option == "personal_information":
+        tableName = 'PersonalInfo'
+        sqlstring = f""" 
+            select affiliation,position,phone_number,email,u_name
+            from {tableName}
+            where person_id = '{person_id}'
+            ;
+        """    
+        my_query(sqlstring,cur)
+        recset = cur.fetchall()
+        row_data = recset[0]
+        print(row_data)
+        return render_template("show-superuser-personalinfo.html",
+            title = "管理者用個人情報参照画面",
+            person_id = person_id,
+            row_data = row_data
+        )
+    else:
+        #同行者の名前を出すための処理とhtmlを作成
+        return "Invalid option"
+    
+
+    
+
+    
+
+@app.route("/logout")
+def logout():
+    session.pop('person_id', None)
+    response = redirect(url_for('login'))
+    response = add_no_cache_headers(response)
+    return response
+
+
+
+@app.route("/insertHealth") #insertHelth->insertHealthにつづりを変更
+def insertHealth():
+    person_id = session["person_id"]
+    return render_template("send-body-health.html",
+        person_id=person_id
+    )
+
+@app.route("/insertHealth2",methods=["POST"]) #情報の書き込み
+def insertHealth2():
+
+    #send-body-health.htmlから情報取得
+    person_id = session["person_id"]
+    temperature = request.form["temperature"]
+
+    joint_pain = request.form.get("arthralgia") 
+    fatigue = request.form.get("sluggishness")
+    headache = request.form.get("headache")
+    sore_throat = request.form.get("pharyngalgia")
+    shortness_of_breath = request.form.get("breathlessness")
+    cough_sneeze = request.form.get("cough")
+    nausea_vomiting = request.form.get("nausea")
+    stomach_ache_diarrhea = request.form.get("stomachache")
+    taste_disorder = request.form.get("dysgeusia")
+    smell_disorder = request.form.get("olfactory disorder")
+
+    #値を取得できなかった場合、変数にfalseを格納
+    if joint_pain==None: 
+        joint_pain='false'
+
+    if fatigue==None: 
+        fatigue='false'
+
+    if headache==None: 
+        headache='false'
+
+    if sore_throat==None: 
+       sore_throat='false'
+
+    if shortness_of_breath==None: 
+       shortness_of_breath='false'
+
+    if cough_sneeze==None: 
+       cough_sneeze='false'
+
+    if nausea_vomiting==None: 
+       nausea_vomiting='false'
+    
+    if stomach_ache_diarrhea==None: 
+       stomach_ache_diarrhea='false'
+
+    if taste_disorder==None: 
+       taste_disorder='false'
+
+    if smell_disorder==None: 
+       smell_disorder='false'
+    
+    
+    #現在の時間取得
+    import datetime
+    health_date = datetime.date.today()
+
+    dbcon,cur = my_open( **dsn )
+   
+    sqlstring = f"""
+        INSERT INTO HealthStatus
+        (person_id,
+        temperature,
+        joint_pain,
+        fatigue,
+        headache,
+        sore_throat,
+        shortness_of_breath,
+        cough_sneeze,
+        nausea_vomiting,
+        stomach_ache_diarrhea,
+        taste_disorder,
+        smell_disorder,
+        health_date,
+        delflag)
+        VALUES
+        ('{person_id}',
+        {temperature},
+        {joint_pain},
+        {fatigue},
+        {headache},
+        {sore_throat},
+        {shortness_of_breath},
+        {cough_sneeze},
+        {nausea_vomiting},
+        {stomach_ache_diarrhea},
+        {taste_disorder},
+        {smell_disorder},
+        '{health_date}',
+        false)
+        ;
+    """
+    my_query(sqlstring,cur)
+
+    #テーブルに書き込み
+    dbcon.commit()
+    my_close() 
+
+
+@app.route("/showHealth") 
+def showHealth():
+    person_id = session["person_id"]
+
+    dbcon,cur = my_open( **dsn )
+
+    #ユーザの健康管理記録を取得
+    sqlstring = f"""
+        SELECT *
+        FROM HealthStatus
+        WHERE person_id = '{person_id}'
+        AND delflag=false
+        ;
+    """
+    my_query(sqlstring,cur)
+    recset = pd.DataFrame(cur.fetchall())
     my_close(dbcon, cur)
-    return render_template( "top.html",
-        namae=namae
+    namae = recset[0]['u_name']
+    return render_template("show-body-health.html",
+        title="健康管理記録",
+        table_data=recset,
+        namae = namae
+    )
+
+@app.route("/deleteHealth",methods=["POST"]) 
+def deleteHealth():
+    #ユーザのIDとテーブルのIDを取得
+    person_id = session["person_id"]
+    symptom_id=request.form["record_id"]
+
+    dbcon,cur = my_open( **dsn )
+
+    #delfalgをtrueに変更
+    sqlstring = f"""
+        UPDATE HealthStatus
+        SET delflag = true
+        WHERE symptom_id = {symptom_id}
+        ;
+    """
+    my_query(sqlstring,cur)
+
+   #テーブルに書き込み
+    dbcon.commit()  
+    my_close()
+    dbcon,cur = my_open( **dsn )
+   #ユーザの健康管理記録を取得
+    sqlstring = f"""
+        SELECT *
+        FROM HealthStatus
+        WHERE person_id = '{person_id}'
+        AND delflag=false
+        ;
+    """
+    my_query(sqlstring,cur)
+    recset = pd.DataFrame(cur.fetchall())
+    namae = recset[0]['u_name']
+
+
+    return render_template("show-body-health.html",
+        title="健康管理記録",
+        table_data=recset,
+        namae = namae
     )
 
 @app.route("/insertActivity1")
@@ -101,7 +358,7 @@ def insertActivity2():
     #SQLオープン
     dbcon,cur = my_open( **dsn )
     #とりあえずpersonIDはこれ
-    person_id = 'S260006'
+    person_id = session['person_id']
 
     #SQL INSERTの場所
     sqlstring = f"""
@@ -123,7 +380,7 @@ def insertActivity2():
         exsit = 'あり'
     else:
         exsit = 'なし'
-    return render_template( "send-actionlog-show.html",
+    return render_template( "send-actionlog-confirm.html",
         title = "登録完了画面",
         message = f"""
                     以下の内容で登録しました。
@@ -144,7 +401,7 @@ def insertActivity2():
 @app.route("/showActivity",methods=['GET','POST'])
 def showActivity():
     dbcon,cur = my_open( **dsn )
-    person_id = 'S260006'
+    person_id = session['person_id']
     sqlstring = f"""
     SELECT *
     FROM  ActivityLog
