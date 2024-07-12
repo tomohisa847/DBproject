@@ -121,11 +121,27 @@ def search():
     dbcon,cur = my_open( **dsn )
     person_id = request.form["person_id"]
     option = request.form["option"]
-
+    #体調管理画面
     if option == "health_observation":
         tableName = 'HealthStatus'
+    #行動記録画面
     elif option == "activity_record":
         tableName = 'ActivityLog'
+        sqlstring =f"""
+            select *
+            from {tableName}
+            where person_id = '{person_id}'
+            AND delflag=false
+            ;
+        """
+        my_query(sqlstring,cur)
+        recset = pd.DataFrame(cur.fetchall())
+        #データフレーム内の各値を格納
+        recset.columns = [desc[0] for desc in cur.description]
+        records = recset.to_dict('records')
+        my_close(dbcon, cur)
+        return render_template("show-superuser-actionlog.html", records=records)
+    #個人情報参照画面    
     elif option == "personal_information":
         tableName = 'PersonalInfo'
         sqlstring = f""" 
