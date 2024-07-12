@@ -1,3 +1,4 @@
+<!-- 行動記録表 -->
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -12,6 +13,7 @@
             padding: 0;
             background-color: #f4f4f4;
         }
+
         .separator {
             margin: 0 5px;
         }
@@ -23,6 +25,7 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .conduct-form h1 {
@@ -88,12 +91,32 @@
         .conduct-form button#back {
             background-color: #6c757d;
         }
+
+        #notification,
+        #notice-send {
+            display: none;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 300px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #notification button,
+        #notice-send button {
+            margin-top: 10px;
+        }
     </style>
 </head>
 
-
 <body>
-    <form class="conduct-form" method="POST" action="/insertActivity2">
+    <form id="conductForm" class="conduct-form" method="POST" action="/insertActivity2">
         <h1>行動記録フォーム</h1>
         <label for="time">時間</label>
         <div id="time">
@@ -139,11 +162,27 @@
         <div>
             <label for="note">特記事項</label>
             <br>
-            <textarea name="note" name="note"></textarea>
+            <textarea name="note"></textarea>
         </div>
-        <input type="submit" value="送信">
-        <a href="/">戻る</a>
+
+        <div class="button-container">
+            <button id="send" type="submit">送信</button>
+            <button id="back" type="button">戻る</button>
+        </div>
+
+        <div id="notice-send">
+            <p>送信完了しました！</p>
+            <br>
+            <p>5秒後にトップページへ戻ります。</p>
+        </div>
+
+        <div id="notification">
+            <p>書いた内容が保存されませんがよろしいですか？</p>
+            <button id="confirmButton" type="button">トップページへ戻る</button>
+            <button class="cancel" id="cancelButton" type="button">キャンセル</button>
+        </div>
     </form>
+
     <script>
         let transitCount = 0;
 
@@ -162,26 +201,44 @@
                 alert("中継地点は最大3地点までです。");
             }
         }
+
         function showHideDiv(show) {
             const accompanyingField = document.getElementById("accompanying_field");
-            const newAccompanyingDiv = document.createElement('div');
             if (show) {
-                accompanyingField.innerHTML=`
+                accompanyingField.innerHTML = `
                     <label for="accompanying">同行者氏名</label>
                     <input type="text" name="accompanying" id="accompanying">
                 `;
-                accompanyingField.appendChild(newAccompanyingDiv);
             } else {
-                
-                accompanyingField.innerHTML=``;
-                
+                accompanyingField.innerHTML = ``;
             }
         }
 
-        // 初期状態を設定
+        document.getElementById('send').addEventListener('click', function (event) {
+            event.preventDefault();
+            document.getElementById('notice-send').style.display = 'block';
+            setTimeout(function () {
+                document.getElementById('conductForm').submit();
+                window.location.href = '/top';
+            }, 5 * 1000);
+        });
+
+        document.getElementById('back').addEventListener('click', function () {
+            document.getElementById('notification').style.display = 'block';
+        });
+
+        document.getElementById('confirmButton').addEventListener('click', function () {
+            window.location.href = '/top';
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            document.getElementById('notification').style.display = 'none';
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
-            showHideDiv(false);  // 初期状態は「なし」
+            showHideDiv(false); // 初期状態は「なし」
         });
     </script>
 </body>
+
 </html>

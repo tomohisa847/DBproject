@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行動記録表示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .record-table {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+.record-table h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .record-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .record-table table, .record-table th, .record-table td {
+            border: 1px solid #ccc;
+        }
+
+        .record-table th, .record-table td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .record-table th {
+            background-color: #f2f2f2;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .expandable {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<!--　record[]の部分を変更して下さい -->
+<body>
+    <div class="record-table">
+        <h1>行動記録</h1>
+        <table>
+                    {% for record in records %}
+                    <tr class="expandable" onclick="toggleDetails('details{{ loop.index }}')">
+                        <th colspan="2">{{ record['start_time'] }}</th> 
+                    </tr>
+                    <tr id="details{{ loop.index }}" class="hidden">
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <th>時間</th>
+                                    <td>{{ record['start_time'] }} ～ {{ record['end_time'] }}</td> <!-- 'start_time' と 'end_time' は実際のカラム名に変更 -->
+                                </tr>
+                                <tr>
+                                    <th>場所</th>
+                                    <td>
+                                        {{ record['departure_address'] }} ～ 
+                                        {% if record['transit_address1'] %} {{ record['transit_address1'] }} ～ {% endif %}
+                                        {% if record['transit_address2'] %} {{ record['transit_address2'] }} ～ {% endif %}
+                                        {% if record['transit_address3'] %} {{ record['transit_address3'] }} ～ {% endif %}
+                                        {{ record['arrival_address'] }} 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>移動方法</th>
+                                    <td>{{ record['transport_method'] }}</td> <!-- 'transport_method' は実際のカラム名に変更 -->
+                                </tr>
+                                <tr>
+                                    <th>同行者</th>
+                                    <td>{{ record['companion'] if record['companion'] else "なし" }}</td> <!-- 'companion' は実際のカラム名に変更 -->
+                                </tr>
+                                <tr>
+                                    <th>特記事項</th>
+                                    <td>{{ record['special_notes'] }}</td> <!-- 'notes' は実際のカラム名に変更 -->
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <a href="/"><button>戻る</button></a>
+            </div>
+        
+            <script>
+                function toggleDetails(id) {
+                    var details = document.getElementById(id);
+                    if (details.classList.contains('hidden')) {
+                        details.classList.remove('hidden');
+                    } else {
+                        details.classList.add('hidden');
+                    }
+                }
+            </script>
+</body>
+
+</html>
