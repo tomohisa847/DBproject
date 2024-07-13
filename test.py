@@ -21,9 +21,16 @@ def add_no_cache_headers(response):
     response.headers['Expires'] = '-1'
     return response
 
+# 起動時に一度だけ実行されるフラグ
+initial_run = True
+
 #tesuttesto
 @app.before_request
 def before_request():
+    global initial_run
+    if initial_run:
+        session.clear()
+        initial_run = False
     # ログインが必要なページを定義
     login_required_paths = ['/']
     # ログインが不要なページを定義
@@ -31,6 +38,9 @@ def before_request():
     if request.path not in login_exempt_paths:
         if 'person_id' not in session:
             return redirect(url_for('login'))
+
+
+
 #testとりあえず保留
 @app.after_request
 def after_request(response):
@@ -96,6 +106,7 @@ def login1():
         session['person_id'] = person_id
         return redirect(url_for('top'))
     else:
+        session.clear()
         return render_template("debug.html",
             debug = 'ユーザーIDとパスワードどちらかが間違っています。'
         )
@@ -110,11 +121,45 @@ def search():
     dbcon,cur = my_open( **dsn )
     person_id = request.form["person_id"]
     option = request.form["option"]
-
+    #体調管理画面
     if option == "health_observation":
         tableName = 'HealthStatus'
+        #ユーザの健康管理記録を取得
+        sqlstring = f"""
+            SELECT *
+            FROM HealthStatus
+            WHERE person_id = '{person_id}'
+            AND delflag=false
+            ;
+        """
+        my_query(sqlstring,cur)
+        recset = pd.DataFrame(cur.fetchall())
+        my_close(dbcon, cur)
+        namae = recset[0]['u_name']
+        return render_template("show-superuser-bodyhealth.html",
+            title="健康管理記録",
+            table_data=recset,
+            namae = namae
+        )
+
+    #行動記録画面
     elif option == "activity_record":
         tableName = 'ActivityLog'
+        sqlstring =f"""
+            select *
+            from {tableName}
+            where person_id = '{person_id}'
+            AND delflag=false
+            ;
+        """
+        my_query(sqlstring,cur)
+        recset = pd.DataFrame(cur.fetchall())
+        #データフレーム内の各値を格納
+        recset.columns = [desc[0] for desc in cur.description]
+        records = recset.to_dict('records')
+        my_close(dbcon, cur)
+        return render_template("show-superuser-actionlog.html", records=records)
+    #個人情報参照画面    
     elif option == "personal_information":
         tableName = 'PersonalInfo'
         sqlstring = f""" 
@@ -132,9 +177,17 @@ def search():
             person_id = person_id,
             row_data = row_data
         )
+    #同行者名を表示
     else:
         #同行者の名前を出すための処理とhtmlを作成
-        return "Invalid option"
+        sqlstring = f"""
+            select *
+            from 'ActivityLog'
+            where person_id = '{person_id}'
+            ;
+
+        """
+        return "stillcomplite"
     
 
     
