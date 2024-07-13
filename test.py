@@ -171,7 +171,7 @@ def search():
         my_query(sqlstring,cur)
         recset = cur.fetchall()
         row_data = recset[0]
-        print(row_data)
+        my_close(dbcon, cur)
         return render_template("show-superuser-personalinfo.html",
             title = "管理者用個人情報参照画面",
             person_id = person_id,
@@ -181,13 +181,19 @@ def search():
     else:
         #同行者の名前を出すための処理とhtmlを作成
         sqlstring = f"""
-            select *
-            from 'ActivityLog'
-            where person_id = '{person_id}'
-            ;
-
+        SELECT DISTINCT companion_name,start_time,end_time
+        FROM ActivityLog
+        WHERE person_id = '{person_id}' AND companion_present = TRUE
+        ;
         """
-        return "stillcomplite"
+        my_query(sqlstring,cur)
+        recset = cur.fetchall()
+        my_close(dbcon,cur)
+        return render_template("show-superuser-companion.html",
+            title = "同行者参照画面",
+            person_id = person_id,
+            row_data = recset
+        )
     
 
     
