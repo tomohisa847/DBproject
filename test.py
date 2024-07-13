@@ -335,8 +335,14 @@ def showHealth():
     """
     my_query(sqlstring,cur)
     recset = pd.DataFrame(cur.fetchall())
-    print(recset)
     my_close(dbcon, cur)
+
+    if recset.empty:
+        return render_template("message.html",
+        title="健康管理記録",
+        message="データがありません"
+    )
+        
 
     dbcon,cur = my_open( **dsn )
     sqlstring = f"""
