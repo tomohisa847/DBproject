@@ -270,7 +270,19 @@ def showHealth():
     my_query(sqlstring,cur)
     recset = pd.DataFrame(cur.fetchall())
     my_close(dbcon, cur)
-    namae = recset[0]['u_name']
+
+    dbcon,cur = my_open( **dsn )
+    sqlstring = f"""
+        SELECT u_name
+        FROM PersonalInfo
+        WHERE person_id = '{person_id}'
+        ;
+    """
+    my_query(sqlstring,cur)
+    rec_name = pd.DataFrame(cur.fetchall())
+    my_close(dbcon, cur)
+
+    namae=rec_name[0]['u_name']
     return render_template("show-body-health.html",
         title="健康管理記録",
         table_data=recset,
@@ -308,7 +320,19 @@ def deleteHealth():
     """
     my_query(sqlstring,cur)
     recset = pd.DataFrame(cur.fetchall())
-    namae = recset[0]['u_name']
+    
+    dbcon,cur = my_open( **dsn )
+    sqlstring = f"""
+        SELECT u_name
+        FROM PersonalInfo
+        WHERE person_id = '{person_id}'
+        ;
+    """
+    my_query(sqlstring,cur)
+    rec_name = pd.DataFrame(cur.fetchall())
+    my_close(dbcon, cur)
+    
+    namae=rec_name[0]['u_name']
 
 
     return render_template("show-body-health.html",
