@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        body button {
+            background-color: #6c757d;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{{title}}</h1>
+    <h2>{{row_data[0]}}</h2>
+    <table border>
+        {% set items = ['ID','記録日', '体温', '関節・筋肉痛', 'だるさ', '頭痛', '咽頭痛', '息苦しさ', '咳・くしゃみ', '吐き気・嘔吐', '腹痛・下痢', '味覚障害',
+        '嗅覚障害',
+        '最終更新日時'] %}
+        <tr>
+            {% for index in range(items|length) %}
+            {% if index > 0 %}
+            <th>{{ items[index] }}</th>
+            {% endif %}
+            {% endfor %}
+        </tr>
+
+        {% for index in range(items|length) %}
+        <tr>
+            {% for row_data in table_data.values %}
+            {% if index > 0 and 3 > index %}
+                <td>{{ row_data[index] }}</td>
+            {% if index == 13 %}
+                <td>{{ row_data[index] }}</td>
+            {% else %}
+                {% if row_data[index] == 1 %}
+                <td>✓</td>
+                {% else %}
+                <td>-</td>
+                {% endif %}
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <button id="back" type="button">戻る</button>
+
+    <script>
+        document.getElementById('back').addEventListener('click', function () {
+            window.location.href = '/top';
+        });
+    </script>
+</body>
+
+</html>
