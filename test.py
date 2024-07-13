@@ -135,7 +135,20 @@ def search():
         my_query(sqlstring,cur)
         recset = pd.DataFrame(cur.fetchall())
         my_close(dbcon, cur)
-        namae = recset[0]['u_name']
+       
+        dbcon,cur = my_open( **dsn )
+        sqlstring = f"""
+            SELECT u_name
+            FROM PersonalInfo
+            WHERE person_id = '{person_id}'
+            ;
+        """
+        my_query(sqlstring,cur)
+        rec_name = pd.DataFrame(cur.fetchall())
+        my_close(dbcon, cur)
+
+        namae=rec_name['u_name'][0]
+
         return render_template("show-superuser-bodyhealth.html",
             title="健康管理記録",
             table_data=recset,
@@ -303,13 +316,13 @@ def insertHealth2():
 
     #テーブルに書き込み
     dbcon.commit()
-    my_close() 
+    my_close(dbcon, cur)
 
 
 @app.route("/showHealth") 
 def showHealth():
     person_id = session["person_id"]
-
+    print(person_id)
     dbcon,cur = my_open( **dsn )
 
     #ユーザの健康管理記録を取得
@@ -322,6 +335,7 @@ def showHealth():
     """
     my_query(sqlstring,cur)
     recset = pd.DataFrame(cur.fetchall())
+    print(recset)
     my_close(dbcon, cur)
 
     dbcon,cur = my_open( **dsn )
@@ -335,7 +349,8 @@ def showHealth():
     rec_name = pd.DataFrame(cur.fetchall())
     my_close(dbcon, cur)
 
-    namae=rec_name[0]['u_name']
+    namae=rec_name['u_name'][0]
+
     return render_template("show-body-health.html",
         title="健康管理記録",
         table_data=recset,
@@ -361,7 +376,8 @@ def deleteHealth():
 
    #テーブルに書き込み
     dbcon.commit()  
-    my_close()
+    my_close(dbcon, cur)
+
     dbcon,cur = my_open( **dsn )
    #ユーザの健康管理記録を取得
     sqlstring = f"""
@@ -384,9 +400,8 @@ def deleteHealth():
     my_query(sqlstring,cur)
     rec_name = pd.DataFrame(cur.fetchall())
     my_close(dbcon, cur)
-    
-    namae=rec_name[0]['u_name']
 
+    namae=rec_name['u_name'][0]
 
     return render_template("show-body-health.html",
         title="健康管理記録",
