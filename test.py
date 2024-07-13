@@ -180,7 +180,13 @@ def search():
     #同行者名を表示
     else:
         #同行者の名前を出すための処理とhtmlを作成
-        return "Invalid option"
+        sqlstring = f"""
+            select *
+            from 'ActivityLog'
+            where person_id = '{person_id}'
+            ;
+
+        """
     
 
     
