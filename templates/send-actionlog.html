@@ -1,5 +1,7 @@
+<!-- 行動記録表 （レイアウト修正版）-->
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +14,10 @@
             background-color: #f4f4f4;
         }
 
+        .separator {
+            margin: 0 5px;
+        }
+
         .conduct-form {
             max-width: 600px;
             margin: 50px auto;
@@ -19,6 +25,7 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .conduct-form h1 {
@@ -31,55 +38,47 @@
             margin-bottom: 5px;
         }
 
-        .form-section {
-            margin-bottom: 20px;
+        .conduct-form #time,
+        .conduct-form #place,
+        .conduct-form #way,
+        .conduct-form #companion {
+            margin-left: 15px;
+            margin-bottom: 15px;
         }
 
-        .form-section > div {
-            margin-bottom: 10px;
+        .conduct-form #time label,
+        .conduct-form #place label,
+        .conduct-form #way label,
+        .conduct-form #companion label {
+            width: 50px;
+            display: inline-block;
         }
 
-        .form-section label {
-            margin-right: 10px;
-        }
-
-        .form-section input[type="text"],
-        .form-section input[type="datetime-local"] {
-            width: calc(100% - 120px);
-            padding: 5px;
-            margin-right: 10px;
-        }
-
-        .form-section input[type="radio"] {
+        .conduct-form #way input[type="checkbox"] {
+            width: auto;
             margin-right: 5px;
         }
 
-        .separator {
+        .conduct-form #companion input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .conduct-form .separator {
             display: inline-block;
             margin: 0 5px;
         }
 
-        .transit-points {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .transit-point {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .transit-point input[type="text"] {
-            width: calc(100% - 120px);
-            margin-right: 10px;
-        }
-
-        .button-container {
-            text-align: center;
+        .conduct-form textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
         }
 
         .conduct-form button {
+            display: inline-block;
             padding: 10px 20px;
             margin-right: 10px;
             border: none;
@@ -91,14 +90,6 @@
 
         .conduct-form button#back {
             background-color: #6c757d;
-        }
-
-        .conduct-form textarea {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-bottom: 10px;
         }
 
         #notification,
@@ -123,67 +114,60 @@
         }
     </style>
 </head>
+
 <body>
     <form id="conductForm" class="conduct-form" method="POST" action="/insertActivity2">
         <h1>行動記録フォーム</h1>
-
-        <div class="form-section" id="time">
-            <div id="time">
-                <label for="start">開始</label>
-                <input type="datetime-local" name="start">
-                <span class="separator">～</span>
-                <label for="stop">終了</label>
-                <input type="datetime-local" name="stop">
-            </div>
-
-        <div class="form-section" id="place">
-            <label for="place">場所</label>
-            <div>
-                <label for="departure">出発</label>
-                <input type="text" name="departure">
-                <span class="separator">～</span>
-                <div id="transit_places" class="transit-points">
-                    <!-- 中継地点がここに追加されます -->
-                </div>
-                <button type="button" onclick="addTransitPlace()">中継地点を追加</button>
-                <span class="separator">～</span>
-                <label for="destination">到着</label>
-                <input type="text" name="destination">
-            </div>
+        <label for="time">時間</label>
+        <div id="time">
+            <label for="start">開始</label>
+            <input type="datetime-local" name="start">
+            <span class="separator">～</span>
+            <label for="stop">終了</label>
+            <input type="datetime-local" name="stop">
         </div>
-
-        <div class="form-section" id="way">
-            <label for="way">移動方法</label>
-            <div>
-                <input type="radio" name="way" value="徒歩"><label for="walk">徒歩</label>
-                <input type="radio" name="way" value="車"><label for="car">車</label>
-                <input type="radio" name="way" value="バス"><label for="bus">バス</label>
-                <input type="radio" name="way" value="電車"><label for="train">電車</label>
-                <input type="radio" name="way" value="その他"><label for="other">その他</label>
+        <label for="place">場所</label>
+        <div id="place">
+            <label for="departure">出発</label>
+            <input type="text" name="departure">
+            <span class="separator">～</span>
+            <div id="transit_places">
+                <!-- 中継地点がここに追加されます -->
             </div>
+            <button type="button" onclick="addTransitPlace()">中継地点を追加</button>
+            <span class="separator">～</span>
+            <label for="destination">到着</label>
+            <input type="text" name="destination">
         </div>
-
-        <div class="form-section" id="companion">
-            <label for="companion">同行者有無</label>
-            <div>
-                <input type="radio" name="companion" value="true" onclick="showHideDiv(true)"><label for="yes">あり</label>
-                <input type="radio" name="companion" value="false" onclick="showHideDiv(false)"><label for="no">なし</label>
-            </div>
+        <label for="way">移動方法</label>
+        <div id="way">
+            <input type="radio" name="way" value="徒歩"><label for="walk">徒歩</label>
+            <input type="radio" name="way" value="車"><label for="car">車</label>
+            <input type="radio" name="way" value="バス"><label for="bus">バス</label>
+            <input type="radio" name="way" value="電車"><label for="train">電車</label>
+            <input type="radio" name="way" value="その他"><label for="other">その他</label>
+        </div>
+        <label for="companion">同行者有無</label>
+        <div id="companion">
+            <input type="radio" name="companion" value="true" onclick="showHideDiv(true)"><label for="yes">あり</label>
+            <input type="radio" name="companion" value="false" onclick="showHideDiv(false)"><label for="no">なし</label>
         </div>
 
         <div id="accompanying_field" class="hidden">
+
         </div>
 
         <input type="hidden" name="accompanying" id="hidden_accompanying" value="none">
 
-        <div class="form-section">
+        <div>
             <label for="note">特記事項</label>
+            <br>
             <textarea name="note"></textarea>
         </div>
 
-        <div class="button-container">
-            <button id="send" type="submit">送信</button>
+        <div class="button-container" align="center">
             <button id="back" type="button">戻る</button>
+            <button id="send" type="submit">送信</button>
         </div>
 
         <div id="notice-send">
@@ -207,13 +191,11 @@
                 transitCount++;
                 const transitPlacesDiv = document.getElementById('transit_places');
                 const newTransitDiv = document.createElement('div');
-                newTransitDiv.classList.add('transit-point');
                 newTransitDiv.innerHTML = `
                     <label for="transit_address${transitCount}">中継地点${transitCount}</label>
                     <input type="text" name="transit_address${transitCount}">
-                    
+                    <span class="separator">～</span>
                 `;
-
                 transitPlacesDiv.appendChild(newTransitDiv);
             } else {
                 alert("中継地点は最大3地点までです。");
@@ -232,15 +214,6 @@
             }
         }
 
-        document.getElementById('send').addEventListener('click', function (event) {
-            event.preventDefault();
-            document.getElementById('notice-send').style.display = 'block';
-            setTimeout(function () {
-                document.getElementById('conductForm').submit();
-                window.location.href = '/';
-            }, 5 * 1000);
-        });
-
         document.getElementById('back').addEventListener('click', function () {
             document.getElementById('notification').style.display = 'block';
         });
@@ -258,4 +231,5 @@
         });
     </script>
 </body>
+
 </html>
