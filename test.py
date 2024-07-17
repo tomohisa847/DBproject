@@ -507,8 +507,34 @@ def showActivity():
     dbcon,cur = my_open( **dsn )
     person_id = session['person_id']
     sqlstring = f"""
-    SELECT *
+    SELECT person_id,companion_name
     FROM  ActivityLog
+    WHERE person_id = '{person_id}' 
+    AND delflag = 'true' 
+    AND companion_present = 'true'
+    ;
+    """
+    my_query(sqlstring,cur)
+    recset = pd.DataFrame(cur.fetchall())
+
+    #データフレーム内の各値を格納
+    recset.columns = [desc[0] for desc in cur.description]
+
+    records = recset.to_dict('records')
+    
+    print(records)
+    my_close(dbcon, cur)
+    return render_template("show-actionlog.html", records=records)
+
+
+
+@app.route("/insertInfect1")
+def insertInfect1():
+    dbcon,cur = my_open( **dsn )
+    person_id = session['person_id']
+    sqlstring = f"""
+    SELECT 
+    FROM ActivityLog
     WHERE person_id = '{person_id}'
     AND delflag=false
     ;
