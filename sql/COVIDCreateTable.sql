@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS infect (
     infect_id INT AUTO_INCREMENT PRIMARY KEY, -- 症状ID: 主キー、自動インクリメント
     person_id VARCHAR(10) NOT NULL, -- 個人ID: 必須項目、外部キー
     infected BOOLEAN, -- 感染者か
+    companion_present BOOLEAN, -- 同行者有無
     diagnosis_date DATE NOT NULL, -- 受診日: 必須項目
     FOREIGN KEY (person_id) REFERENCES PersonalInfo(person_id) -- 外部キー設定: PersonalInfoテーブルのperson_idを参照
 );
