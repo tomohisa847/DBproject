@@ -233,7 +233,9 @@ def showInfect1():
     # ビューからデータを取得
     sql_select = """
         SELECT person_name, person_id, diagnosis_date, companion_present
-        FROM infect_with_name;
+        FROM infect_with_name
+        where infected = true
+        ;
     """
     my_query(sql_select, cur)
     recset = cur.fetchall()
@@ -246,10 +248,20 @@ def showInfect1():
 
 @app.route("/deleteInfect",methods=["GET","POST"])
 def deleteInfect():
+    person_id = request.form["person_id"]
+    diagnosis_date = request.form["diagnosis_date"]
     dbcon, cur = my_open(**dsn)
     sqlstring=f"""
-        
+        UPDATE infect
+        SET infected = false
+        WHERE person_id = '{person_id}'
+        AND diagnosis_date = '{diagnosis_date}'
+        ;
     """
+    my_query(sqlstring, cur)
+    dbcon.commit()
+    my_close(dbcon, cur)
+    return redirect(url_for('showInfect1'))
     
 
 @app.route("/logout")
