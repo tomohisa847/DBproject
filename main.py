@@ -573,7 +573,10 @@ def insertInfect2():
     dbcon.commit()
     my_close(dbcon,cur)
     
-    return render_template("debug.html")
+    return render_template("message.html",
+        title = "感染申請完了",
+        message = "感染申請が完了しました。"    
+    )
     
 
 #プログラム起動
