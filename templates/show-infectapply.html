@@ -102,7 +102,7 @@
                     <div>
                         <strong>ユーザID:</strong> {{ data["person_id"] }}<br>
                         <strong>名前:</strong> {{ data["person_name"] }}<br>
-                        <strong>同行者の有無:</strong> {{ data["companion_present"] }}<br>
+                        <strong>同行者の有無:</strong> <span class="companion-status">{{ data["companion_present"] }}</span><br>
                         <strong>受診日:</strong> {{ data["diagnosis_date"] }}
                     </div>
                     <form action="/deleteInfect" method="post">
@@ -118,5 +118,18 @@
             <a href="/superuser"><button class="save-button">保存</button></a>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var companionStatusElements = document.querySelectorAll('.companion-status');
+            companionStatusElements.forEach(function(element) {
+                var status = element.textContent.trim();
+                if (status === 'True' || status === 'true' || status === '1') {
+                    element.textContent = 'あり';
+                } else {
+                    element.textContent = 'なし';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
