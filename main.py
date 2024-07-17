@@ -41,7 +41,7 @@ def before_request():
 
 
 
-#testとりあえず保留
+#testtestとりあえず保留
 @app.after_request
 def after_request(response):
     # ログアウト後のキャッシュを無効化
