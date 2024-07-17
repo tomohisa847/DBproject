@@ -543,11 +543,14 @@ def insertInfect1():
     my_query(sqlstring,cur)
     recset = cur.fetchall()
     my_close(dbcon, cur)
-    return render_template("show-infect.html", 
-        records=records
+    companions = recset
+    return render_template("send-infect.html", 
+        companions = companions
     )
-@app.route("/insertInfect1",methods=["GET","POST"])
-def insertInfect2:
+
+@app.route("/insertInfect2",methods=["GET","POST"])
+def insertInfect2():
+    return render_template("debug.html")
     
 
 #プログラム起動
