@@ -1,36 +1,167 @@
-<!--変えました5-->
 <!doctype html>
 <html lang="ja">
 <head>
     <title>{{title}}</title>
     <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .record-table {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .record-table h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .record-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .record-table table, .record-table th, .record-table td {
+            border: 1px solid #ccc;
+        }
+
+        .record-table th, .record-table td {
+            padding: 20px 50px 20px 50px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .record-table th {
+            background-color: #f2f2f2;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .expandable {
+            cursor: pointer;
+        }
+
+        .delete-button {
+            background-color: #ff0000;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px; /* ここを追加 */
+            cursor: pointer;
+        }
+
+        .back-button {
+            background-color: #6c757d;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px; /* ここを追加 */
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+         /* スクロールバー全体を対象にする */
+         .table-scroll::-webkit-scrollbar {
+            width: 10px;
+            /* スクロールバーの幅 */
+            height: 10px;
+            /* スクロールバーの高さ */
+        }
+
+        /* スクロールバーの背景部分をカスタマイズ */
+        .table-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            /* スクロールバーの背景色 */
+            border-radius: 5px;
+            /* 角丸にする */
+        }
+
+        /* スクロールバーの操作部分をカスタマイズ */
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #888;
+            /* スクロールバーの操作部分の背景色 */
+            border-radius: 5px;
+            /* 角丸にする */
+        }
+
+        /* スクロールバーの操作部分にホバーした時のスタイル */
+        .table-scroll::-webkit-scrollbar-thumb:hover {
+            background: #555;
+            /* ホバー時のスクロールバーの操作部分の背景色 */
+        }
+
+        .table-scroll {
+            overflow: scroll;
+        }
+    </style>
+    <script>
+        function convert() {
+            var cells = document.querySelectorAll('.convert-cell');
+            cells.forEach(function(cell) {
+                if (cell.innerText == "1") {
+                    cell.innerText = "✓";
+                } else if (cell.innerText == "0") {
+                    cell.innerText = "-";
+                }
+            });
+        }
+
+        window.onload = convert;
+    </script>
 </head>
 <body>
-    <h2>{{namae}}さんの{{title}}</h2>
-    <p>症状などのところは0は無し、1は有り</p>
-    <table border>
-        <tr>
-            <th>項目</th>
-            {% for row_data in table_data.values %}
-                <th>{{ row_data[13] }}</th> <!-- 記録日をヘッダーに表示 -->
-            {% endfor %}
-        </tr>
-        {% set items = ['ID', '記録日', '体温', '関節・筋肉痛', 'だるさ', '頭痛', '咽頭痛', '息苦しさ', '咳・くしゃみ', '吐き気・嘔吐', '腹痛・下痢', '味覚障害', '嗅覚障害', '最終更新日時'] %}
-        {% for index in range(items|length) %}
+    <div class="record-table">
+        <h2>{{namae}}さんの{{title}}</h2>
+        <div class="table-scroll">
+        <table border>
             <tr>
-                <th>{{ items[index] }}</th>
+                <th>項目</th>
                 {% for row_data in table_data.values %}
-                    {% if index == 13 %}
-                        <td>{{ row_data[13] }}</td> <!-- 記録日 -->
-                    {% elif index > 1 %}
-                        <td>{{ row_data[index] }}</td> <!-- 他の項目は1つインデックスをシフト -->
-                    {% else %}
-                        <td>{{ row_data[index] }}</td> <!-- ID -->
-                    {% endif %}
+                    <th>{{ row_data[13] }}</th> <!-- 記録日をヘッダーに表示 -->
                 {% endfor %}
             </tr>
-        {% endfor %}
-    </table>
-    トップに<a href="/superuser">戻る</a>
+            {% set items = ['ID', '記録日', '体温', '関節・筋肉痛', 'だるさ', '頭痛', '咽頭痛', '息苦しさ', '咳・くしゃみ', '吐き気・嘔吐', '腹痛・下痢', '味覚障害', '嗅覚障害', '最終更新日時'] %}
+            {% for index in range(items|length) %}
+                <tr>
+                    <th>{{ items[index] }}</th>
+                    {% for row_data in table_data.values %}
+                    {% if index == 0 %}
+                    <td>{{ row_data[1] }}</td> <!-- ID -->
+                    {% elif index > 1 %}
+                    <td class="convert-cell">{{ row_data[index] }}</td> <!-- 他の項目は1つインデックスをシフト -->
+                    {% else %}
+                    <td>{{ row_data[13] }}</td> <!-- 記録日 -->
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            <tr>
+                <th>削除</th>
+                {% for row_data in table_data.values %}
+                    <td>
+                        <form action="/deleteHealth" method="post">
+                            <input type="hidden" name="record_id" value="{{ row_data[0] }}">
+                            <input type="hidden" name="person_id" value="{{ row_data[1] }}">
+                            <button type="submit" class="delete-button">削除</button>
+                        </form>
+                    </td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div><br>
+        <a href="/superuser"><button class="back-button">戻る</button></a>
+    </div>
 </body>
 </html>
