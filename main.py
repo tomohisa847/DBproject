@@ -3,7 +3,7 @@ import pandas as pd
 import sqlite3
 from flask import Flask, request, render_template, session, redirect, url_for, make_response
 import datetime
-#Data Source Nameのパラメータを辞書型変数で定義
+#Data Source Nameのパラメータを辞書型変数で定義1
 dsn = {
     'host' : '172.30.0.10',  #ホスト名(IPアドレス)
     'port' : '3306',        #mysqlの接続ポート番号
