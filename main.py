@@ -513,23 +513,26 @@ def showActivity():
     dbcon,cur = my_open( **dsn )
     person_id = session['person_id']
     sqlstring = f"""
-    SELECT person_id,companion_name
+    SELECT *
     FROM  ActivityLog
     WHERE person_id = '{person_id}' 
-    AND delflag = 'true' 
-    AND companion_present = 'true'
+    AND delflag = 'false' 
     ;
     """
     my_query(sqlstring,cur)
     recset = pd.DataFrame(cur.fetchall())
-
+    if recset.empty:
+        return render_template("message.html",
+        title="健康管理記録",
+        message="データがありません"
+    )
     #データフレーム内の各値を格納
     recset.columns = [desc[0] for desc in cur.description]
 
     records = recset.to_dict('records')
-    
     print(records)
     my_close(dbcon, cur)
+
     return render_template("show-actionlog.html", records=records)
 
 

@@ -1,5 +1,5 @@
 -- infectテーブルにテストデータを挿入
-USE DBproject;
+
 INSERT INTO infect (person_id, infected, diagnosis_date) VALUES
 ('S210001', TRUE, '2024-01-15'),
 ('S220001', FALSE, '2024-02-20'),
