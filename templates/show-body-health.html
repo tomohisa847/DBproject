@@ -137,13 +137,13 @@
                 <tr>
                     <th>{{ items[index] }}</th>
                     {% for row_data in table_data.values %}
-                        {% if index == 13 %}
-                            <td>{{ row_data[13] }}</td> <!-- 記録日 -->
-                        {% elif index > 1 %}
-                            <td class="convert-cell">{{ row_data[index] }}</td> <!-- 他の項目は1つインデックスをシフト -->
-                        {% else %}
-                            <td>{{ row_data[index] }}</td> <!-- ID -->
-                        {% endif %}
+                    {% if index == 0 %}
+                    <td>{{ row_data[1] }}</td> <!-- ID -->
+                    {% elif index > 1 %}
+                    <td class="convert-cell">{{ row_data[index] }}</td> <!-- 他の項目は1つインデックスをシフト -->
+                    {% else %}
+                    <td>{{ row_data[13] }}</td> <!-- 記録日 -->
+                    {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}
