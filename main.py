@@ -208,9 +208,60 @@ def search():
             row_data = recset
         )
     
-
+@app.route("/showInfect1")
+def showInfect1():
+    dbcon, cur = my_open(**dsn)
     
+    sql_create_view = """
+        CREATE OR REPLACE VIEW infect_with_name AS
+        SELECT 
+            i.infect_id, 
+            i.person_id, 
+            p.u_name AS person_name,
+            i.infected, 
+            i.companion_present,
+            i.diagnosis_date
+        FROM 
+            infect i
+        JOIN 
+            PersonalInfo p
+        ON 
+            i.person_id = p.person_id;
+    """
+    my_query(sql_create_view, cur)
+    
+    # ビューからデータを取得
+    sql_select = """
+        SELECT person_name, person_id, diagnosis_date, companion_present
+        FROM infect_with_name
+        where infected = true
+        ;
+    """
+    my_query(sql_select, cur)
+    recset = cur.fetchall()
+    my_close(dbcon, cur)
+    
+    # データを変数のリストに入れる
+    data = recset
+    
+    return render_template("show-infectapply.html", row_data=data)
 
+@app.route("/deleteInfect",methods=["GET","POST"])
+def deleteInfect():
+    person_id = request.form["person_id"]
+    diagnosis_date = request.form["diagnosis_date"]
+    dbcon, cur = my_open(**dsn)
+    sqlstring=f"""
+        UPDATE infect
+        SET infected = false
+        WHERE person_id = '{person_id}'
+        AND diagnosis_date = '{diagnosis_date}'
+        ;
+    """
+    my_query(sqlstring, cur)
+    dbcon.commit()
+    my_close(dbcon, cur)
+    return redirect(url_for('showInfect1'))
     
 
 @app.route("/logout")

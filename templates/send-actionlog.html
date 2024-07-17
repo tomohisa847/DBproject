@@ -1,4 +1,3 @@
-<!-- 行動記録表 （レイアウト修正版）-->
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -121,15 +120,15 @@
         <label for="time">時間</label>
         <div id="time">
             <label for="start">開始</label>
-            <input type="datetime-local" name="start">
+            <input type="datetime-local" name="start" required>
             <span class="separator">～</span>
             <label for="stop">終了</label>
-            <input type="datetime-local" name="stop">
+            <input type="datetime-local" name="stop" required>
         </div>
         <label for="place">場所</label>
         <div id="place">
             <label for="departure">出発</label>
-            <input type="text" name="departure">
+            <input type="text" name="departure" required>
             <span class="separator">～</span>
             <div id="transit_places">
                 <!-- 中継地点がここに追加されます -->
@@ -137,7 +136,7 @@
             <button type="button" onclick="addTransitPlace()">中継地点を追加</button>
             <span class="separator">～</span>
             <label for="destination">到着</label>
-            <input type="text" name="destination">
+            <input type="text" name="destination" required>
         </div>
         <label for="way">移動方法</label>
         <div id="way">
@@ -154,7 +153,6 @@
         </div>
 
         <div id="accompanying_field" class="hidden">
-
         </div>
 
         <input type="hidden" name="accompanying" id="hidden_accompanying" value="none">
@@ -207,10 +205,12 @@
             if (show) {
                 accompanyingField.innerHTML = `
                     <label for="accompanying">同行者氏名</label>
-                    <input type="text" name="accompanying" id="accompanying">
+                    <input type="text" name="accompanying" id="accompanying" required>
                 `;
+                document.getElementById('hidden_accompanying').value = ''; // hiddenフィールドの値をクリア
             } else {
                 accompanyingField.innerHTML = ``;
+                document.getElementById('hidden_accompanying').value = 'none'; // hiddenフィールドの値を'none'に設定
             }
         }
 
