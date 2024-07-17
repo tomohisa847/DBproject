@@ -208,9 +208,22 @@ def search():
             row_data = recset
         )
     
+@app.route("/showInfect1")
+def showInfect1():
+    dbcon,cur = my_open( **dsn )
+    sqlstring  =f"""
+        select *
+        from infect
+        where delflat = false
+        ;
+    """
+    my_query(sqlstring,cur)
+    recset = cur.fetchall()
+    my_close(dbcon,cur)
+    return render_template("show-infectapply.html",
+        row_data = recset,
 
-    
-
+    )
     
 
 @app.route("/logout")
@@ -561,8 +574,8 @@ def insertInfect2():
     companion_present = request.form["companion_present"]
     diagnosis_date = request.form["date-received"]
     sqlstring = f"""
-        INSERT INTO infect(person_id,infected,companion_present,diagnosis_date) 
-        VALUES ('{person_id}', True, {companion_present},'{diagnosis_date}')
+        INSERT INTO infect(person_id,infected,companion_present,diagnosis_date,delflag) 
+        VALUES ('{person_id}', True, {companion_present},'{diagnosis_date}',false)
         ;
     
     """
@@ -571,6 +584,9 @@ def insertInfect2():
     my_close(dbcon,cur)
     
     return render_template("debug.html")
+
+
+
     
 
 #プログラム起動

@@ -57,9 +57,10 @@ CREATE TABLE IF NOT EXISTS ActivityLog (
 
 -- infectテーブルが存在しない場合に作成
 CREATE TABLE IF NOT EXISTS infect (
-    infect_id INT AUTO_INCREMENT PRIMARY KEY, -- 症状ID: 主キー、自動インクリメント
-    person_id VARCHAR(10) NOT NULL, -- 個人ID: 必須項目、外部キー
-    infected BOOLEAN, -- 感染者か
-    diagnosis_date DATE NOT NULL, -- 受診日: 必須項目
-    FOREIGN KEY (person_id) REFERENCES PersonalInfo(person_id) -- 外部キー設定: PersonalInfoテーブルのperson_idを参照
+    infect_id INT AUTO_INCREMENT PRIMARY KEY,  -- 症状ID: 主キー、自動インクリメント
+    person_id VARCHAR(10) NOT NULL,            -- 個人ID: 必須項目、外部キー
+    infected BOOLEAN,                          -- 感染者か
+    diagnosis_date DATE NOT NULL,              -- 受診日: 必須項目
+    delflag BOOLEAN,                           -- 削除フラグ
+    FOREIGN KEY (person_id) REFERENCES PersonalInfo(person_id)  -- 外部キー設定: PersonalInfoテーブルのperson_idを参照
 );
