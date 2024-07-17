@@ -208,9 +208,48 @@ def search():
             row_data = recset
         )
     
-
+@app.route("/showInfect1")
+def showInfect1():
+    dbcon, cur = my_open(**dsn)
     
+    sql_create_view = """
+        CREATE OR REPLACE VIEW infect_with_name AS
+        SELECT 
+            i.infect_id, 
+            i.person_id, 
+            p.u_name AS person_name,
+            i.infected, 
+            i.companion_present,
+            i.diagnosis_date
+        FROM 
+            infect i
+        JOIN 
+            PersonalInfo p
+        ON 
+            i.person_id = p.person_id;
+    """
+    my_query(sql_create_view, cur)
+    
+    # ビューからデータを取得
+    sql_select = """
+        SELECT person_name, person_id, diagnosis_date, companion_present
+        FROM infect_with_name;
+    """
+    my_query(sql_select, cur)
+    recset = cur.fetchall()
+    my_close(dbcon, cur)
+    
+    # データを変数のリストに入れる
+    data = recset
+    
+    return render_template("show-infectapply.html", row_data=data)
 
+@app.route("/deleteInfect",methods=["GET","POST"])
+def deleteInfect():
+    dbcon, cur = my_open(**dsn)
+    sqlstring=f"""
+        
+    """
     
 
 @app.route("/logout")
@@ -564,8 +603,8 @@ def insertInfect2():
     companion_present = request.form["companion_present"]
     diagnosis_date = request.form["date-received"]
     sqlstring = f"""
-        INSERT INTO infect(person_id,infected,companion_present,diagnosis_date) 
-        VALUES ('{person_id}', True, {companion_present},'{diagnosis_date}')
+        INSERT INTO infect(person_id,infected,companion_present,diagnosis_date,delflag) 
+        VALUES ('{person_id}', True, {companion_present},'{diagnosis_date}',false)
         ;
     
     """
