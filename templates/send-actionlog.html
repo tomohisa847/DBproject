@@ -1,4 +1,4 @@
-<!-- 行動記録表 -->
+<!-- 行動記録表 （レイアウト修正版）-->
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -165,9 +165,9 @@
             <textarea name="note"></textarea>
         </div>
 
-        <div class="button-container">
-            <button id="send" type="submit">送信</button>
+        <div class="button-container" align="center">
             <button id="back" type="button">戻る</button>
+            <button id="send" type="submit">送信</button>
         </div>
 
         <div id="notice-send">
@@ -214,21 +214,12 @@
             }
         }
 
-        document.getElementById('send').addEventListener('click', function (event) {
-            event.preventDefault();
-            document.getElementById('notice-send').style.display = 'block';
-            setTimeout(function () {
-                document.getElementById('conductForm').submit();
-                window.location.href = '/top';
-            }, 5 * 1000);
-        });
-
         document.getElementById('back').addEventListener('click', function () {
             document.getElementById('notification').style.display = 'block';
         });
 
         document.getElementById('confirmButton').addEventListener('click', function () {
-            window.location.href = '/top';
+            window.location.href = '/';
         });
 
         document.getElementById('cancelButton').addEventListener('click', function () {

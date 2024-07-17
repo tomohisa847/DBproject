@@ -319,11 +319,16 @@ def insertHealth2():
         ;
     """
     my_query(sqlstring,cur)
+    print(cur)
 
     #テーブルに書き込み
     dbcon.commit()
     my_close(dbcon, cur)
 
+    return render_template( "message.html",
+        title = "登録完了画面",
+        message = "登録完了しました。"
+    )
 
 @app.route("/showHealth") 
 def showHealth():
@@ -485,7 +490,7 @@ def insertActivity2():
         exsit = 'あり'
     else:
         exsit = 'なし'
-    return render_template( "send-actionlog-confirm.html",
+    return render_template( "message.html",
         title = "登録完了画面",
         message = f"""
                     以下の内容で登録しました。

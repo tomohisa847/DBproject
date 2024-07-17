@@ -1,3 +1,4 @@
+<!--レイアウト変更済み-->
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -78,8 +79,29 @@
             cursor: pointer;
         }
 
-        .condition-form button:last-child {
+        .condition-form button#back {
             background-color: #6c757d;
+        }
+
+        #notification,
+        #notice-send {
+            display: none;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 300px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #notification button,
+        #notice-send button {
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -88,12 +110,12 @@
     <div class="condition-form">
         <h1>体調入力画面</h1>
         <!--form文で情報をやり取りする形式に変更-->
-        <form action="/insertHealth2" method="POST">
+        <form id="conditionForm" action="/insertHealth2" method="POST">
         <input type="hidden" id="person_id" name="person_id" value={{person_id}}>
 
         <div class="temperature">
             <label for="temperature">体温</label>
-            <input type="text" id="temperature" name="temperature" value="℃">
+            <input type="text" id="temperature" name="temperature">℃
         </div>
 
         <div>以下の症状が当てはまる場合チェックを入れてください
@@ -110,12 +132,37 @@
                 <li><input type="checkbox" name="olfactory disorder" value="true"><label for="olfactory disorder">嗅覚障害</label></li>
             </ul>
         </div>
-
-        <!--buttonからinputに変更-->
-        <button type="submit" value="送信">
-        </form>
-        <a href="/">戻る</a>
+    
+    <div class="button-container" align="center">
+        <button id="back" type="button">戻る</button>
+        <button id="send" type="submit">送信</button>
     </div>
+
+    <div id="notice-send">
+        <p>送信完了しました！</p>
+        <br>
+        <p>5秒後にトップページへ戻ります。</p>
+    </div>
+
+    <div id="notification">
+        <p>書いた内容が保存されませんがよろしいですか？</p>
+        <button id="confirmButton" type="button">トップページへ戻る</button>
+        <button class="cancel" id="cancelButton" type="button">キャンセル</button>
+    </div>
+    <script>
+        document.getElementById('back').addEventListener('click', function () {
+            document.getElementById('notification').style.display = 'block';
+        });
+
+        document.getElementById('confirmButton').addEventListener('click', function () {
+            window.location.href = '/';
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            document.getElementById('notification').style.display = 'none';
+        });
+
+    </script>
 </body>
 
 </html>
