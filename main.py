@@ -615,8 +615,8 @@ def insertInfect2():
     companion_present = request.form["companion_present"]
     diagnosis_date = request.form["date-received"]
     sqlstring = f"""
-        INSERT INTO infect(person_id,infected,companion_present,diagnosis_date,delflag) 
-        VALUES ('{person_id}', True, {companion_present},'{diagnosis_date}',false)
+        INSERT INTO infect(person_id,infected,companion_present,diagnosis_date) 
+        VALUES ('{person_id}', True, {companion_present},'{diagnosis_date}')
         ;
     
     """
