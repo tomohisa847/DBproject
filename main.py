@@ -211,6 +211,7 @@ def search():
 @app.route("/showInfect1")
 def showInfect1():
     dbcon, cur = my_open(**dsn)
+    
     sql_create_view = """
         CREATE OR REPLACE VIEW infect_with_name AS
         SELECT 
@@ -218,8 +219,8 @@ def showInfect1():
             i.person_id, 
             p.u_name AS person_name,
             i.infected, 
-            i.diagnosis_date, 
-            i.delflag
+            i.companion_present,
+            i.diagnosis_date
         FROM 
             infect i
         JOIN 
@@ -231,7 +232,7 @@ def showInfect1():
     
     # ビューからデータを取得
     sql_select = """
-        SELECT person_name, person_id, diagnosis_date
+        SELECT person_name, person_id, diagnosis_date, companion_present
         FROM infect_with_name;
     """
     my_query(sql_select, cur)
@@ -239,10 +240,16 @@ def showInfect1():
     my_close(dbcon, cur)
     
     # データを変数のリストに入れる
-    data = [{"person_name": row[0], "person_id": row[1], "diagnosis_date": row[2]} for row in recset]
+    data = recset
     
     return render_template("show-infectapply.html", row_data=data)
 
+@app.route("/deleteInfect",methods=["GET","POST"])
+def deleteInfect():
+    dbcon, cur = my_open(**dsn)
+    sqlstring=f"""
+        
+    """
     
 
 @app.route("/logout")

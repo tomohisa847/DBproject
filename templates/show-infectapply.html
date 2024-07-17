@@ -100,20 +100,20 @@
             {% for data in row_data %}
                 <div class="list-item">
                     <div>
-                        <strong>ユーザID:</strong> {{ data["person_name"] }}<br>
-                        <strong>名前:</strong> {{ case.name }}<br>
-                        <strong>同行者の有無:</strong> {{ case.companion }}<br>
-                        <strong>受診日:</strong> {{ case.date }}
+                        <strong>ユーザID:</strong> {{ data["person_id"] }}<br>
+                        <strong>名前:</strong> {{ data["person_name"] }}<br>
+                        <strong>同行者の有無:</strong> {{ data["companion_present"] }}<br>
+                        <strong>受診日:</strong> {{ data["diagnosis_date"] }}
                     </div>
-                    <form action="{{ url_for('delete', id=case.id) }}" method="post">
+                    <form action="/deleteInfect" method="post">
                         <button type="submit" class="delete-button">削除</button>
                     </form>
                 </div>
             {% endfor %}
         </div>
         <div class="footer">
-            <a href="top-superuser.html" class="back-button">戻る</a>
-            <form action="{{ url_for('save') }}" method="post" style="display:inline;">
+            <a href="/superuser" class="back-button">戻る</a>
+            <form action="/superuser" method="post" style="display:inline;">
                 <button type="submit" class="save-button">保存</button>
             </form>
         </div>
