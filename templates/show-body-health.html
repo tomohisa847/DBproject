@@ -1,4 +1,3 @@
-<!--変えました6-->
 <!doctype html>
 <html lang="ja">
 <head>
@@ -12,14 +11,6 @@
             background-color: #f4f4f4;
         }
 
-        body button {
-            background-color: #6c757d;
-            color: white;
-            padding: 8px 12px;
-            border: none;
-            cursor: pointer;
-        }
-
         .record-table {
             max-width: 800px;
             margin: 50px auto;
@@ -28,7 +19,8 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-.record-table h1 {
+
+        .record-table h1 {
             text-align: center;
             margin-bottom: 20px;
         }
@@ -59,6 +51,25 @@
         .expandable {
             cursor: pointer;
         }
+
+        .delete-button {
+            background-color: #ff0000;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 12px; /* ここを追加 */
+            cursor: pointer;
+        }
+
+        .back-button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 12px; /* ここを追加 */
+            cursor: pointer;
+            text-decoration: none;
+        }
     </style>
     <script>
         function convert() {
@@ -71,177 +82,49 @@
                 }
             });
         }
-    
+
         window.onload = convert;
     </script>
 </head>
 <body>
     <div class="record-table">
         <h2>{{namae}}さんの{{title}}</h2>
-    <table border>
-        <tr>
-            <th>項目</th>
-            {% for row_data in table_data.values %}
-                <th>{{ row_data[13] }}</th> <!-- 記録日をヘッダーに表示 -->
-            {% endfor %}
-        </tr>
-        {% set items = ['ID', '記録日', '体温', '関節・筋肉痛', 'だるさ', '頭痛', '咽頭痛', '息苦しさ', '咳・くしゃみ', '吐き気・嘔吐', '腹痛・下痢', '味覚障害', '嗅覚障害', '最終更新日時'] %}
-        {% for index in range(items|length) %}
+        <table border>
             <tr>
-                <th>{{ items[index] }}</th>
+                <th>項目</th>
                 {% for row_data in table_data.values %}
-                    {% if index == 13 %}
-                        <td>{{ row_data[13] }}</td> <!-- 記録日 -->
-                    {% elif index > 1 %}
-                        <td class="convert-cell">{{ row_data[index] }}</td> <!-- 他の項目は1つインデックスをシフト -->
-                    {% else %}
-                        <td>{{ row_data[index] }}</td> <!-- ID -->
-                    {% endif %}
+                    <th>{{ row_data[13] }}</th> <!-- 記録日をヘッダーに表示 -->
                 {% endfor %}
             </tr>
-        {% endfor %}
-        <tr>
-            <th>削除</th>
-            {% for row_data in table_data.values %}
-                <td>
-                    <form action="/deleteHealth" method="post">
-                        <input type="hidden" name="record_id" value="{{ row_data[0] }}">
-                        <input type="hidden" name="person_id" value="{{ row_data[1] }}">
-                        <button type="submit">削除</button>
-                    </form>
-                </td>
+            {% set items = ['ID', '記録日', '体温', '関節・筋肉痛', 'だるさ', '頭痛', '咽頭痛', '息苦しさ', '咳・くしゃみ', '吐き気・嘔吐', '腹痛・下痢', '味覚障害', '嗅覚障害', '最終更新日時'] %}
+            {% for index in range(items|length) %}
+                <tr>
+                    <th>{{ items[index] }}</th>
+                    {% for row_data in table_data.values %}
+                        {% if index == 13 %}
+                            <td>{{ row_data[13] }}</td> <!-- 記録日 -->
+                        {% elif index > 1 %}
+                            <td class="convert-cell">{{ row_data[index] }}</td> <!-- 他の項目は1つインデックスをシフト -->
+                        {% else %}
+                            <td>{{ row_data[index] }}</td> <!-- ID -->
+                        {% endif %}
+                    {% endfor %}
+                </tr>
             {% endfor %}
-        </tr>
-    </table>
-    <a href="/"><button>戻る</button></a>
-</div>
+            <tr>
+                <th>削除</th>
+                {% for row_data in table_data.values %}
+                    <td>
+                        <form action="/deleteHealth" method="post">
+                            <input type="hidden" name="record_id" value="{{ row_data[0] }}">
+                            <input type="hidden" name="person_id" value="{{ row_data[1] }}">
+                            <button type="submit" class="delete-button">削除</button>
+                        </form>
+                    </td>
+                {% endfor %}
+            </tr>
+        </table>
+        <a href="/"><button class="back-button">戻る</button></a>
+    </div>
 </body>
 </html>
-
-
-
-<!-- <!doctype html>
-<html lang="ja">
-<head>
-    <title>健康管理システム</title>
-    <meta charset="utf-8">
-</head>
-<body>
-    <h2>山田 太郎さんの健康観察記録</h2>
-    <p>症状などのところは0は無し、1は有り</p>
-    <table border>
-        <tr>
-            <th>項目</th>
-            <th>2024-07-01</th>
-            <th>2024-07-02</th>
-            <th>2024-07-03</th>
-        </tr>
-        <tr>
-            <th>ID</th>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-        </tr>
-        <tr>
-            <th>記録日</th>
-            <td>2024-07-01</td>
-            <td>2024-07-02</td>
-            <td>2024-07-03</td>
-        </tr>
-        <tr>
-            <th>体温</th>
-            <td>36.5</td>
-            <td>36.7</td>
-            <td>37.2</td>
-        </tr>
-        <tr>
-            <th>関節・筋肉痛</th>
-            <td>0</td>
-            <td>0</td>
-            <td>1</td>
-        </tr>
-        <tr>
-            <th>だるさ</th>
-            <td>0</td>
-            <td>0</td>
-            <td>1</td>
-        </tr>
-        <tr>
-            <th>頭痛</th>
-            <td>0</td>
-            <td>1</td>
-            <td>1</td>
-        </tr>
-        <tr>
-            <th>咽頭痛</th>
-            <td>0</td>
-            <td>0</td>
-            <td>1</td>
-        </tr>
-        <tr>
-            <th>息苦しさ</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <th>咳・くしゃみ</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <th>吐き気・嘔吐</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <th>腹痛・下痢</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <th>味覚障害</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <th>嗅覚障害</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <th>最終更新日時</th>
-            <td>2024-07-01 08:00</td>
-            <td>2024-07-02 08:00</td>
-            <td>2024-07-03 08:00</td>
-        </tr>
-        <tr>
-            <th>削除</th>
-            <td>
-                <form action="/delete_record" method="post">
-                    <input type="hidden" name="record_id" value="1">
-                    <button type="submit">削除</button>
-                </form>
-            </td>
-            <td>
-                <form action="/delete_record" method="post">
-                    <input type="hidden" name="record_id" value="2">
-                    <button type="submit">削除</button>
-                </form>
-            </td>
-            <td>
-                <form action="/delete_record" method="post">
-                    <input type="hidden" name="record_id" value="3">
-                    <button type="submit">削除</button>
-                </form>
-            </td>
-        </tr>
-    </table>
-    トップに<a href="/top">戻る</a>
-</body>
-</html> -->
