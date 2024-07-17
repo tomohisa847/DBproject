@@ -1,3 +1,4 @@
+USE DBproject;
 INSERT INTO PersonalInfo (person_id, pass, affiliation, position, phone_number, email, u_name) VALUES
 ('S210001', '1234', '営業部', '課長', 1234567890, 'user1@gmail.com', '佐藤 太郎'),
 ('S220001', '1234', '営業部', '係長', 2345678901, 'user2@outlook.com', '鈴木 花子'),
