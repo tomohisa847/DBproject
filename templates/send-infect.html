@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COVID-19 陽性申請フォーム</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 15px;
+            background-color: #cccccc;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button#positive-btn {
+            background-color: #f8d7da;
+        }
+
+        button#positive-btn.clicked {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        .close-contact-section {
+            background-color: #e9ecef;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .close-contact-section ul {
+            list-style: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .close-contact-section li {
+            font-size: 16px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button-group button {
+            width: 48%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #submit-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #back-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .date-input {
+            margin: 20px 0;
+        }
+
+        .date-input label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .date-input input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        #notice-send,
+        #notification {
+            display: none;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 300px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #notice-send p,
+        #notification p {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>COVID-19が陽性と診断された場合は以下から申請してください</h1>
+        <button id="positive-btn">陽性</button>
+        <form action="/insertInfect2" method="post">
+            同行者の有無
+            <input type="radio" name="companion_present" value="true">
+            <div class="date-input">
+                <label for="date-received">受診日</label>
+                <input type="date" id="date-received" name="date-received" required>
+            </div>
+            <div class="button-group">
+                <button id="back-btn" type="button">戻る</button>
+                <button id="submit-btn" type="submit">送信</button>
+            </div>
+        </form>
+    </div>
+    <div id="notification">
+        <p>書いた内容が保存されませんがよろしいですか？</p>
+        <button id="confirmButton" type="button">トップページへ戻る</button>
+        <button class="cancel" id="cancelButton" type="button">キャンセル</button>
+    </div>
+    <script>
+        document.getElementById('positive-btn').addEventListener('click', function () {
+            this.classList.toggle('clicked');
+        });
+
+        document.getElementById('back-btn').addEventListener('click', function () {
+            document.getElementById('notification').style.display = 'block';
+        });
+
+        document.getElementById('confirmButton').addEventListener('click', function () {
+            window.location.href = '/';
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            document.getElementById('notification').style.display = 'none';
+        });
+    </script>
+</body>
+
+</html>

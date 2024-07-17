@@ -430,6 +430,7 @@ def deleteHealth():
 def insertActivity1():
     return render_template( "send-actionlog.html")
 
+
 @app.route("/insertActivity2",methods=['GET','POST'])
 def insertActivity2():
     #開始時間と終了時間の取得　
@@ -512,10 +513,11 @@ def showActivity():
     dbcon,cur = my_open( **dsn )
     person_id = session['person_id']
     sqlstring = f"""
-    SELECT *
+    SELECT person_id,companion_name
     FROM  ActivityLog
-    WHERE person_id = '{person_id}'
-    AND delflag=false
+    WHERE person_id = '{person_id}' 
+    AND delflag = 'true' 
+    AND companion_present = 'true'
     ;
     """
     my_query(sqlstring,cur)
@@ -530,6 +532,46 @@ def showActivity():
     my_close(dbcon, cur)
     return render_template("show-actionlog.html", records=records)
 
+
+
+@app.route("/insertInfect1")
+def insertInfect1():
+    dbcon,cur = my_open( **dsn )
+    person_id = session['person_id']
+    sqlstring = f"""
+    SELECT companion_name
+    FROM ActivityLog
+    WHERE person_id = '{person_id}'
+    AND delflag=false
+    AND companion_present = true
+    ;
+    """
+    my_query(sqlstring,cur)
+    recset = cur.fetchall()
+    my_close(dbcon, cur)
+    companions = recset
+    return render_template("send-infect.html", 
+        companions = companions
+    )
+
+@app.route("/insertInfect2",methods=["GET","POST"])
+def insertInfect2():
+    dbcon,cur = my_open( **dsn )
+    person_id = session["person_id"]
+    companion_present = request.form["companion_present"]
+    diagnosis_date = request.form["date-received"]
+    sqlstring = f"""
+        INSERT INTO infect(person_id,infected,companion_present,diagnosis_date) 
+        VALUES ('{person_id}', True, {companion_present},'{diagnosis_date}')
+        ;
+    
+    """
+    my_query(sqlstring,cur)
+    dbcon.commit()
+    my_close(dbcon,cur)
+    
+    return render_template("debug.html")
+    
+
 #プログラム起動
 app.run(host="localhost",port=5000,debug=True)
-

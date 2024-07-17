@@ -3,3 +3,4 @@ use DBproject;
 DROP TABLE IF EXISTS ActivityLog;
 DROP TABLE IF EXISTS HealthStatus;
 DROP TABLE IF EXISTS PersonalInfo;
+DROP TABLE IF EXISTS infect;
