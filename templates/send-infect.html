@@ -142,8 +142,11 @@
         <h1>COVID-19が陽性と診断された場合は以下から申請してください</h1>
         <button id="positive-btn">陽性</button>
         <form action="/insertInfect2" method="post">
-            同行者の有無
-            <input type="radio" name="companion_present" value="true">
+            同行者の有無<br>
+            あり
+            <input type="radio" name="companion_present" value="true"><br>
+            なし
+            <input type="radio" name="companion_present" value="false">
             <div class="date-input">
                 <label for="date-received">受診日</label>
                 <input type="date" id="date-received" name="date-received" required>
