@@ -106,6 +106,8 @@
                         <strong>受診日:</strong> {{ data["diagnosis_date"] }}
                     </div>
                     <form action="/deleteInfect" method="post">
+                        <input type="hidden" name="person_id" value="{{data['person_id']}}">
+                        <input type="hidden" name="diagnosis_date" value="{{data['diagnosis_date']}}">
                         <button type="submit" class="delete-button">削除</button>
                     </form>
                 </div>
@@ -113,9 +115,7 @@
         </div>
         <div class="footer">
             <a href="/superuser" class="back-button">戻る</a>
-            <form action="/superuser" method="post" style="display:inline;">
-                <button type="submit" class="save-button">保存</button>
-            </form>
+            <a href="/superuser"><button class="save-button">保存</button></a>
         </div>
     </div>
 </body>
