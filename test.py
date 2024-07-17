@@ -550,7 +550,9 @@ def insertInfect1():
 
 @app.route("/insertInfect2",methods=["GET","POST"])
 def insertInfect2():
-    return render_template("debug.html")
+    person_id = session["person_id"]
+    companion_name_list = request.form["contacts"]
+    diagnosis_date = request.form["date-received"]
     
 
 #プログラム起動
