@@ -550,9 +550,21 @@ def insertInfect1():
 
 @app.route("/insertInfect2",methods=["GET","POST"])
 def insertInfect2():
+    dbcon,cur = my_open( **dsn )
     person_id = session["person_id"]
-    companion_name_list = request.form["contacts"]
+    companion_present = request.form["companion_present"]
     diagnosis_date = request.form["date-received"]
+    sqlstring = f"""
+        INSERT INTO infect(person_id,infected,companion_present,diagnosis_date) 
+        VALUES ('{person_id}', True, {companion_present},'{diagnosis_date}')
+        ;
+    
+    """
+    my_query(sqlstring,cur)
+    dbcon.commit()
+    my_close(dbcon,cur)
+    
+    return render_template("debug.html")
     
 
 #プログラム起動

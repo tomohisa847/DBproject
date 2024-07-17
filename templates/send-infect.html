@@ -142,14 +142,8 @@
         <h1>COVID-19が陽性と診断された場合は以下から申請してください</h1>
         <button id="positive-btn">陽性</button>
         <form action="/insertInfect2" method="post">
-            <div class="close-contact-section">
-                <p>濃厚接触が疑われる同行者を選択してください</p>
-                <ul>
-                    {% for companion in companions %}
-                    <li><input type="checkbox" name="contacts" value="{{ companion['companion_name'] }}">{{ companion['companion_name'] }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+            同行者の有無
+            <input type="radio" name="companion_present" value="true">
             <div class="date-input">
                 <label for="date-received">受診日</label>
                 <input type="date" id="date-received" name="date-received" required>
@@ -159,11 +153,6 @@
                 <button id="submit-btn" type="submit">送信</button>
             </div>
         </form>
-    </div>
-    <div id="notice-send">
-        <p>送信完了しました！</p>
-        <br>
-        <p>5秒後にトップページへ戻ります。</p>
     </div>
     <div id="notification">
         <p>書いた内容が保存されませんがよろしいですか？</p>
