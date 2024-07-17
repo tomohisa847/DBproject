@@ -210,20 +210,39 @@ def search():
     
 @app.route("/showInfect1")
 def showInfect1():
-    dbcon,cur = my_open( **dsn )
-    sqlstring  =f"""
-        select *
-        from infect
-        where delflat = false
-        ;
+    dbcon, cur = my_open(**dsn)
+    sql_create_view = """
+        CREATE OR REPLACE VIEW infect_with_name AS
+        SELECT 
+            i.infect_id, 
+            i.person_id, 
+            p.u_name AS person_name,
+            i.infected, 
+            i.diagnosis_date, 
+            i.delflag
+        FROM 
+            infect i
+        JOIN 
+            PersonalInfo p
+        ON 
+            i.person_id = p.person_id;
     """
-    my_query(sqlstring,cur)
+    my_query(sql_create_view, cur)
+    
+    # ビューからデータを取得
+    sql_select = """
+        SELECT person_name, person_id, diagnosis_date
+        FROM infect_with_name;
+    """
+    my_query(sql_select, cur)
     recset = cur.fetchall()
-    my_close(dbcon,cur)
-    return render_template("show-infectapply.html",
-        row_data = recset,
+    my_close(dbcon, cur)
+    
+    # データを変数のリストに入れる
+    data = [{"person_name": row[0], "person_id": row[1], "diagnosis_date": row[2]} for row in recset]
+    
+    return render_template("show-infectapply.html", row_data=data)
 
-    )
     
 
 @app.route("/logout")
