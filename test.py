@@ -424,6 +424,26 @@ def deleteHealth():
 @app.route("/insertActivity1")
 def insertActivity1():
     return render_template( "send-actionlog.html")
+#個々マージの時に消してくれ
+@app.route("/makeconfrict")
+def makeconfrict():
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    print("test")
+    return "confrict"
 
 @app.route("/insertActivity2",methods=['GET','POST'])
 def insertActivity2():
