@@ -508,6 +508,7 @@ def insertActivity2():
     transit_address2 = request.form.get('transit_address2')
     transit_address3 = request.form.get('transit_address3')
     destination = request.form["destination"]
+
     #移動手段を取得
     way = request.form["way"]
     #同行者の有無を取得してありなら名前を聞く
@@ -526,19 +527,52 @@ def insertActivity2():
     dbcon,cur = my_open( **dsn )
     #とりあえずpersonIDはこれ
     person_id = session['person_id']
-
-    #SQL INSERTの場所
-    sqlstring = f"""
-        INSERT INTO ActivityLog(
+    #一個も入ってないとき
+    if transit_address1 == None:
+        sqlstring = f"""
+            INSERT INTO ActivityLog(
+            person_id, start_time, end_time, transport_method, 
+            departure_address ,arrival_address, companion_present, 
+            companion_name, special_notes, last_update, delflag
+            ) VALUES ('{person_id}', '{start}','{stop}','{way}','{departure}','{destination}','{companion_boolen}','{accompanying}','{note}','{datetime_now}', 0)
+            ;
+         """
+    #一個入ってるとき
+    elif transit_address2 == None:
+        sqlstring = f"""
+            INSERT INTO ActivityLog(
+            person_id, start_time, end_time, transport_method, 
+            departure_address, transit_address1 , arrival_address, companion_present, 
+            companion_name, special_notes, last_update, delflag
+            ) VALUES ('{person_id}', '{start}','{stop}','{way}','{departure}','{transit_address1}','{destination}','{companion_boolen}','{accompanying}','{note}','{datetime_now}', 0)
+            ;
+         """
+    #二個入ってるとき
+    elif transit_address3 == None:
+        sqlstring = f"""
+            INSERT INTO ActivityLog(
+            person_id, start_time, end_time, transport_method, 
+            departure_address, transit_address1, transit_address2, arrival_address, companion_present, 
+            companion_name, special_notes, last_update, delflag
+            ) VALUES ('{person_id}', '{start}','{stop}','{way}','{departure}','{transit_address1}',
+            '{transit_address2}','{destination}','{companion_boolen}','{accompanying}','{note}','{datetime_now}', 0)
+            ;
+    
+        """
+    #全部入ってるとき
+    else:
+        sqlstring = f"""
+            INSERT INTO ActivityLog(
             person_id, start_time, end_time, transport_method, 
             departure_address, transit_address1, transit_address2, 
             transit_address3, arrival_address, companion_present, 
             companion_name, special_notes, last_update, delflag
-        ) VALUES ('{person_id}', '{start}','{stop}','{way}','{departure}','{transit_address1}',
-        '{transit_address2}','{transit_address3}','{destination}','{companion_boolen}','{accompanying}','{note}','{datetime_now}', 0)
-        ;
+            ) VALUES ('{person_id}', '{start}','{stop}','{way}','{departure}','{transit_address1}',
+            '{transit_address2}','{transit_address3}','{destination}','{companion_boolen}','{accompanying}','{note}','{datetime_now}', 0)
+            ;
     
-    """
+        """
+
     #クエリ実行
     my_query(sqlstring,cur)
     dbcon.commit()
