@@ -32,7 +32,7 @@
             display: block;
             width: 100%;
             margin: 10px 0;
-            padding: 15px;
+            padding: 10px;
             background-color: #cccccc;
             border: none;
             cursor: pointer;
@@ -76,8 +76,8 @@
 
         .button-group button {
             width: 48%;
-            padding: 10px;
-            font-size: 16px;
+            padding: 8px;
+            font-size: 14px;
             border: none;
             cursor: pointer;
             border-radius: 5px;
@@ -134,6 +134,30 @@
         #notification p {
             margin: 10px 0;
         }
+
+        #notification .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #notification .button-group button {
+            width: 48%;
+            padding: 8px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        #notification #confirmButton {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #notification #cancelButton {
+            background-color: #6c757d;
+            color: white;
+        }
     </style>
 </head>
 
@@ -159,8 +183,10 @@
     </div>
     <div id="notification">
         <p>書いた内容が保存されませんがよろしいですか？</p>
-        <button id="confirmButton" type="button">トップページへ戻る</button>
-        <button class="cancel" id="cancelButton" type="button">キャンセル</button>
+        <div class="button-group">
+            <button id="confirmButton" type="button">トップページへ戻る</button>
+            <button id="cancelButton" type="button" class="cancel">キャンセル</button>
+        </div>
     </div>
     <script>
         document.getElementById('positive-btn').addEventListener('click', function () {
