@@ -124,7 +124,7 @@ def search():
     #体調管理画面
     if option == "health_observation":
         tableName = 'HealthStatus'
-        #ユーザの健康管理記録を取得
+        #ユーザの体調観察表を取得
         sqlstring = f"""
             SELECT *
             FROM HealthStatus
@@ -151,7 +151,7 @@ def search():
         namae=rec_name['u_name'][0]
 
         return render_template("show-superuser-bodyhealth.html",
-            title="健康管理記録",
+            title="体調観察表",
             table_data=recset,
             namae = namae
         )
@@ -188,7 +188,7 @@ def search():
         row_data = recset[0]
         my_close(dbcon, cur)
         return render_template("show-superuser-personalinfo.html",
-            title = "管理者用個人情報参照画面",
+            title = "個人情報参照画面",
             person_id = person_id,
             row_data = row_data
         )
@@ -391,7 +391,7 @@ def showHealth():
     print(person_id)
     dbcon,cur = my_open( **dsn )
 
-    #ユーザの健康管理記録を取得
+    #ユーザの体調観察表を取得
     sqlstring = f"""
         SELECT *
         FROM HealthStatus
@@ -406,7 +406,7 @@ def showHealth():
 
     if recset.empty:
         return render_template("message.html",
-        title="健康管理記録",
+        title="体調観察表",
         message="データがありません"
     )
         
@@ -425,7 +425,7 @@ def showHealth():
     namae=rec_name['u_name'][0]
 
     return render_template("show-body-health.html",
-        title="健康管理記録",
+        title="体調観察表",
         table_data=recset,
         namae = namae
     )
@@ -452,7 +452,7 @@ def deleteHealth():
     my_close(dbcon, cur)
 
     dbcon,cur = my_open( **dsn )
-   #ユーザの健康管理記録を取得
+   #ユーザの体調観察表を取得
     sqlstring = f"""
         SELECT *
         FROM HealthStatus
@@ -477,7 +477,7 @@ def deleteHealth():
     namae=rec_name['u_name'][0]
 
     return render_template("show-body-health.html",
-        title="健康管理記録",
+        title="体調観察表",
         table_data=recset,
         namae = namae
     )
@@ -568,7 +568,7 @@ def showActivity():
     recset = pd.DataFrame(cur.fetchall())
     if recset.empty:
         return render_template("message.html",
-        title="健康管理記録",
+        title="体調観察表",
         message="データがありません"
     )
     #データフレーム内の各値を格納
