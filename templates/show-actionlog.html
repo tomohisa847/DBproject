@@ -104,7 +104,7 @@
                         </tr>
                         <tr>
                             <th>同行者</th>
-                            <td>{{ record['companion'] if record['companion'] else "なし" }}</td>
+                            <td>{{ record['companion_name'] if record['companion_present'] else "なし" }}</td>
                         </tr>
                         <tr>
                             <th>特記事項</th>
