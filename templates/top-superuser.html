@@ -103,11 +103,29 @@
         .logout-button:hover {
             text-decoration: underline;
         }
-    </style>
+
+        .showInfect-button {
+            background-color: #ffdd00;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #333;
+            font-size: 16px;
+            display: block;
+            margin: 10px auto;
+            text-decoration: none;
+            max-width: 150px;
+        }
+
+        .showInfect-button:hover {
+            background-color: #e6c800;
+        }    </style>
 </head>
 <body>
     <div class="main-container">
         <h1>管理者用ページ</h1>
+        <a href="/showInfect1" class="showInfect-button">感染申請者</a>
         <form id="search-form" action="/search" method="POST">
             <div class="input-group">
                 <label for="student-number">ユーザIDを入力</label>
@@ -141,7 +159,6 @@
             </ul>
             <input type="submit" class="search-button" id="search-link" value="検索">
         </form>
-        <a href="/showInfect1">感染者表示</a>
         <a href="/logout" class="logout-button">ログアウト</a>
     </div>
 </body>
