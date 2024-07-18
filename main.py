@@ -130,6 +130,7 @@ def search():
             FROM HealthStatus
             WHERE person_id = '{person_id}'
             AND delflag=false
+            ORDER BY health_date DESC 
             ;
         """
         my_query(sqlstring,cur)
@@ -163,6 +164,7 @@ def search():
             from {tableName}
             where person_id = '{person_id}'
             AND delflag=false
+            ORDER BY start_time DESC 
             ;
         """
         my_query(sqlstring,cur)
@@ -196,7 +198,9 @@ def search():
         sqlstring = f"""
         SELECT DISTINCT companion_name,start_time,end_time
         FROM ActivityLog
-        WHERE person_id = '{person_id}' AND companion_present = TRUE
+        WHERE person_id = '{person_id}' 
+        AND companion_present = TRUE
+        ORDER BY start_time DESC 
         ;
         """
         my_query(sqlstring,cur)
@@ -393,6 +397,7 @@ def showHealth():
         FROM HealthStatus
         WHERE person_id = '{person_id}'
         AND delflag=false
+        ORDER BY health_date DESC 
         ;
     """
     my_query(sqlstring,cur)
@@ -567,7 +572,8 @@ def showActivity():
     SELECT *
     FROM  ActivityLog
     WHERE person_id = '{person_id}' 
-    AND delflag = 'false' 
+    AND delflag = 'false'
+    ORDER BY start_time DESC 
     ;
     """
     my_query(sqlstring,cur)
