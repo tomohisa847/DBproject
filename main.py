@@ -377,8 +377,8 @@ def insertHealth2():
     my_close(dbcon, cur)
 
     return render_template( "message.html",
-        title = "登録完了画面",
-        message = "登録完了しました。"
+        title = "登録完了",
+        message = "登録完了しました"
     )
 
 @app.route("/showHealth") 
@@ -507,7 +507,8 @@ def insertActivity2():
     way = request.form["way"]
     #同行者の有無を取得してありなら名前を聞く
     companion = request.form["companion"]
-    if companion:
+    print(companion)
+    if companion=="true":
         companion_boolen=1
     else:
         companion_boolen=0
@@ -542,21 +543,8 @@ def insertActivity2():
     else:
         exsit = 'なし'
     return render_template( "message.html",
-        title = "登録完了画面",
-        message = f"""
-                    以下の内容で登録しました。
-                    開始: {start}
-                    終了: {stop}
-                    出発地点: {departure}
-                    中継地点1: {transit_address1}
-                    中継地点2: {transit_address2}
-                    中継地点3: {transit_address3}
-                    目的地: {destination}
-                    移動手段: {way}
-                    同行者有無: {exsit}
-                    同行者名: {accompanying}
-                    特記事項: {note}
-                """
+        title = "登録完了",
+        message = "登録完了しました"
     )
 
 @app.route("/showActivity",methods=['GET','POST'])
@@ -625,8 +613,8 @@ def insertInfect2():
     my_close(dbcon,cur)
     
     return render_template("message.html",
-        title = "感染申請完了",
-        message = "感染申請が完了しました。"    
+        title = "感染申請",
+        message = "申請が完了しました"    
     )
     
 
